@@ -1,4 +1,4 @@
-import { WhatshotOutlined } from "@mui/icons-material";
+import { WhatsApp } from "@mui/icons-material";
 import { Box, Container, IconButton } from "@mui/material";
 
 export default function Footer() {
@@ -20,7 +20,7 @@ export default function Footer() {
                     }}
                 >
                     <IconButton color="primary">
-                        <WhatshotOutlined />
+                        <WhatsApp />
                     </IconButton>
                 </Box>
             </Container>
