@@ -1,6 +1,7 @@
 import { Container, Grid2, Typography } from "@mui/material";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { Cart } from "./components/cart";
 // import ProductCard from "./components/ProductCard";
 
 export default function Home() {
@@ -12,14 +13,16 @@ export default function Home() {
     <>
       <Header />
       <Container>
-        <Typography variant="h3" component="h1" gutterBottom>Produtos</Typography>
+        <Typography variant="h3" component="h1" align="center" gutterBottom>
+          Produtos
+        </Typography>
         <Grid2 container spacing={3}>
-          {/* {produtos.map((produto) => (
-            <Grid2  key={produto.id} xs={12} sm={6} md={4}>
-              <ProductCard produto={produtos} />
-            </Grid2>
-
-          ))} */}
+          <Grid2>
+            {/* <ProductList /> */}
+          </Grid2>
+        </Grid2>
+        <Grid2>
+          <Cart />
         </Grid2>
       </Container> 
       <Footer />
