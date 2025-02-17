@@ -1,35 +1,46 @@
 'use client';
-import { Button, Container, List, ListItem, ListItemText, Typography } from "@mui/material";
-import { useState } from "react";
+import { Card, CardContent,  Typography } from "@mui/material";
+// import { useRouter } from "next/navigation";
+// import { useRouter } from "next/router";
+// import { useState } from "react";
 
-interface IProduto {
-    name: string;
-    preco: number;
+export interface IProduto {
+    nome: string;
+    preco?: number;
+    img?: string;
   }
-export function Cart() {
-    const [cartItems, setCartItems] = useState<IProduto[]>([]);
+  export interface CartProps {
+    cart: IProduto[];
+  }
+export function Cart({ cart }: CartProps) {
+    // const [cartItems, setCartItems] = useState<IProduto[]>([]);
+    // const router = useRouter();
     
-    const addToCart = (produto: IProduto) => {
-        setCartItems([
-            ...cartItems,
-            produto
-        ]);
-    };
+    // const addToCart = (produto: IProduto) => {
+    //     setCartItems([
+    //         ...cartItems,
+    //         produto
+    //     ]);
+    // };
+    // const handleCheckout = () => {
+    //     addToCart();
+    //     router.push('/checkout');
+    // }
 /// criar um avaliador de curriculo
     return (
-        <Container>
-            <Typography>Carrinho de Compras</Typography>
-
-            <List>
-                {cartItems.map((item, index) => (
-                    <ListItem key={index}>
-                        <ListItemText primary={item.name} secondary={`R$: ${item.preco.toFixed(2)}`} />
-                    </ListItem>
-                ))}
-            </List>
-            <Button
-                onClick={() => addToCart({name: "Produ", preco: 100})} 
-            />
-        </Container>
+        <Card sx={{ p: 2 }}>
+            <CardContent>
+                <Typography variant="h5">Carrinho</Typography>
+                {cart.length === 0 ? (
+                    <Typography variant='h4'>Seu carrinho está vazio</Typography> 
+                ) : (
+                    cart.map((produto, index) => (
+                        <Typography key={index} variant="body2">
+                            {produto.nome} - R$: {produto.preco}
+                        </Typography>
+                    ))
+                )}
+            </CardContent>
+        </Card>
     )
 }
