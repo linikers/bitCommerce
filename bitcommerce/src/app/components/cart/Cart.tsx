@@ -1,5 +1,5 @@
 'use client';
-import { Card, CardContent,  Typography } from "@mui/material";
+import { Button, Card, CardContent,  Container,  Typography } from "@mui/material";
 // import { useRouter } from "next/navigation";
 // import { useRouter } from "next/router";
 // import { useState } from "react";
@@ -28,6 +28,7 @@ export function Cart({ cart }: CartProps) {
     // }
 /// criar um avaliador de curriculo
     return (
+        <Container>
         <Card sx={{ p: 2 }}>
             <CardContent>
                 <Typography variant="h5">Carrinho</Typography>
@@ -42,5 +43,7 @@ export function Cart({ cart }: CartProps) {
                 )}
             </CardContent>
         </Card>
+        <Button>Finalizar Compra</Button>
+        </Container>
     )
 }
