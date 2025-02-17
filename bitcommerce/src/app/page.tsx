@@ -25,13 +25,15 @@ export default function Home() {
         <Typography variant="h3" component="h1" align="center" gutterBottom>
           Produtos
         </Typography>
-        <Grid2 container spacing={3}>
+        <Grid2 container spacing={3} sx={{ display: "flex", flexWrap: "wrap"}}>
           <Grid2>
-            <ProductList addToCart={addToCart} />
+            {/* <Grid2> */}
+              <ProductList addToCart={addToCart} />
+            {/* </Grid2> */}
           </Grid2>
-        </Grid2>
-        <Grid2>
-          <Cart cart={cart}/>
+          <Grid2>
+            <Cart cart={cart}/>
+          </Grid2>
         </Grid2>
       </Container> 
       <Footer />
