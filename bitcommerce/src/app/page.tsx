@@ -26,7 +26,7 @@ export default function Home() {
           Produtos
         </Typography>
         <Grid2 container spacing={3} sx={{ display: "flex", flexWrap: "wrap"}}>
-          <Grid2>
+          <Grid2 sx={{ display: "flex", flexWrap: "wrap"}}>
             {/* <Grid2> */}
               <ProductList addToCart={addToCart} />
             {/* </Grid2> */}

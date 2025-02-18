@@ -43,7 +43,7 @@ export function Cart({ cart }: CartProps) {
                 )}
             </CardContent>
         </Card>
-        <Button>Finalizar Compra</Button>
+        <Button sx={{ marginTop: 2 }}>Finalizar Compra</Button>
         </Container>
     )
 }
