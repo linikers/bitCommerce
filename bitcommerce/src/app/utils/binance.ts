@@ -6,7 +6,7 @@ const BINANCE_API_SECRET ='TESTE';
 const url = "https://www.bpay.binanceapi.com";
 
 
-export async function criarOrdemPagamento(amount: number, currency: string) {
+export async function criarOrdemPagamento(amount: number, currency: string, nome: string, endereco: string, telefone: string) {
   
   const timestamp = Date.now();
   const payload = {

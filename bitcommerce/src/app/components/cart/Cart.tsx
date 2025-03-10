@@ -1,5 +1,6 @@
 'use client';
 import { Button, Card, CardContent,  Container,  Typography } from "@mui/material";
+import { useRouter } from "next/router";
 // import { useState } from "react";
 
 
@@ -13,6 +14,8 @@ export interface IProduto {
   }
 export function Cart({ cart }: CartProps) {
     // const [dadosCli, setDadosCli] = useState([]);
+    const router = useRouter();
+    const pageCheckout = '/checkout'
     const total = cart.reduce((sum, produto) => sum + (produto.preco || 0), 0);
     
     const handleCheckOut = () => {
@@ -20,7 +23,7 @@ export function Cart({ cart }: CartProps) {
          cart, total
         };
         localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
-        window.location.href = "/checkout";
+        router.push = (pageCheckout);
     }
     return (
         <Container>
