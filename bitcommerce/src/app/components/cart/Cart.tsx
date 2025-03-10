@@ -1,8 +1,7 @@
 'use client';
 import { Button, Card, CardContent,  Container,  Typography } from "@mui/material";
-// import { useRouter } from "next/navigation";
-// import { useRouter } from "next/router";
 // import { useState } from "react";
+
 
 export interface IProduto {
     nome: string;
@@ -13,20 +12,16 @@ export interface IProduto {
     cart: IProduto[];
   }
 export function Cart({ cart }: CartProps) {
-    // const [cartItems, setCartItems] = useState<IProduto[]>([]);
-    // const router = useRouter();
+    // const [dadosCli, setDadosCli] = useState([]);
+    const total = cart.reduce((sum, produto) => sum + (produto.preco || 0), 0);
     
-    // const addToCart = (produto: IProduto) => {
-    //     setCartItems([
-    //         ...cartItems,
-    //         produto
-    //     ]);
-    // };
-    // const handleCheckout = () => {
-    //     addToCart();
-    //     router.push('/checkout');
-    // }
-/// criar um avaliador de curriculo
+    const handleCheckOut = () => {
+        const checkoutData = {
+         cart, total
+        };
+        localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
+        window.location.href = "/checkout";
+    }
     return (
         <Container>
         <Card sx={{ p: 2 }}>
@@ -37,13 +32,14 @@ export function Cart({ cart }: CartProps) {
                 ) : (
                     cart.map((produto, index) => (
                         <Typography key={index} variant="body2">
-                            {produto.nome} - R$: {produto.preco}
+                            {produto.nome} - R$: {produto.preco?.toFixed(2)}
                         </Typography>
                     ))
                 )}
+                <Typography variant="h6">Total: R${total.toFixed(2)}</Typography>
             </CardContent>
         </Card>
-        <Button sx={{ marginTop: 2 }}>Finalizar Compra</Button>
+        <Button sx={{ marginTop: 2 }} onClick={handleCheckOut}>Finalizar Compra</Button>
         </Container>
     )
 }
