@@ -1,19 +1,19 @@
 'use client';
-import { Button, Card, CardContent,  Container,  Typography } from "@mui/material";
-// import { useRouter } from "next/router";
+import { RemoveCircleOutlineOutlined } from "@mui/icons-material";
+import { Button, Card, CardContent,  Container,  IconButton,  Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
-// import { useState } from "react";
-
 
 export interface IProduto {
-    nome: string;
-    preco?: number;
-    img?: string;
+    id: number,
+    nome: string,
+    preco?: number,
+    img?: string,
   }
   export interface CartProps {
     cart: IProduto[];
+    removeFromCart: (index: number) => void;
   }
-export function Cart({ cart }: CartProps) {
+export function Cart({ cart, removeFromCart }: CartProps) {
 
     const router = useRouter();
     const pageCheckout = '/checkout'
@@ -36,9 +36,12 @@ export function Cart({ cart }: CartProps) {
                     <Typography variant='h4'>Seu carrinho está vazio</Typography> 
                 ) : (
                     cart.map((produto, index) => (
-                        <Typography key={index} variant="body2">
+                        <div key={produto.id}>
                             {produto.nome} - R$: {produto.preco?.toFixed(2)}
-                        </Typography>
+                            <IconButton onClick={() => removeFromCart(index)}>
+                                    <RemoveCircleOutlineOutlined />
+                            </IconButton>
+                        </div>
                     ))
                 )}
                 <Typography variant="h6">Total: R${total.toFixed(2)}</Typography>

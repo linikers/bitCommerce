@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { IProduto } from "../components/cart/Cart";
 
 export interface IDadosCliente {
+    // id: number;
     nome: string;
     endereco: string;
     telefone: string;
@@ -66,20 +67,16 @@ export default function CheckoutPage() {
     return (
         <Container>
             <Typography variant="h3" gutterBottom>Checkout/Pagamento</Typography>
-            {/* <checkoutForm /> */}
+            
             <TextField label="Nome" name="nome" value={dadosCliente.nome} onChange={handleChange} fullWidth margin="normal" />
             <TextField label="Endereço" name="endereco" value={dadosCliente.endereco} onChange={handleChange} fullWidth margin="normal" />
             <TextField label="Telefone" name="telefone" value={dadosCliente.telefone} onChange={handleChange} fullWidth margin="normal" />
-            {/* <TextField label="Total" name="total" value={dadosCliente.total} onChange={handleChange} fullWidth margin="normal" /> */}
-            {/* <Typography variant="h5">Nome: {dadosCliente.nome || "não informado"}</Typography>
-            <Typography variant="h5">Endereço: {dadosCliente.endereco || "não informado"}</Typography>
-            <Typography variant="h5">Telefone: {dadosCliente.telefone || "não informado"}</Typography>
-             */}
-             <Typography variant="h5">Total: R$ {dadosCliente.total.toFixed(2) || "não informado"}</Typography>
+   
+            <Typography variant="h5">Total: R$ {dadosCliente.total.toFixed(2) || "não informado"}</Typography>
 
             {dadosCliente.pedido.length > 0 ? (
-                dadosCliente.pedido.map((produto, index) => (
-                <Typography key={index} variant="body2">
+                dadosCliente.pedido.map((produto, ) => (
+                <Typography key={produto.id} variant="body2">
                     {produto.nome} - R$: {produto.preco ? produto.preco.toFixed(2) : "0:00"}
                 </Typography>
                 ))

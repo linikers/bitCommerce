@@ -13,8 +13,8 @@ interface ListaProdutosProps {
 export function ProductList({ addToCart}: ListaProdutosProps) {
     return (
         <>
-        {produtos.map((produto, index) => (
-            <Card key={index} sx={{ mb: 2, margin: 1 }}>
+        {produtos.map((produto, ) => (
+            <Card key={produto.id} sx={{ mb: 2, margin: 1 }}>
                 <CardContent>
                     <Typography variant="h3">{produto.nome}</Typography>
                     <Typography variant="h3">R$: {produto.preco}</Typography>

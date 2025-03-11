@@ -4,20 +4,56 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Cart, IProduto } from "./components/cart";
 import { ProductList } from "./components/cart/ProductList";
-import { useState } from "react";
-// import { produtos } from "../../products";
-// import ProductCard from "./components/ProductCard";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  // const produtos = [
-  //   { id: 1, nome: 'Produto 1', preco: '100', img: '/images/produto1.jpg' },
-  //   { id: 2, nome: 'Produto 2', preco: '200', img: '/images/produto2.jpg' },
-  // ];
-  const [cart, setCart] = useState<IProduto[]>([]);
+
+  const [cart, setCart] = useState<IProduto[]>(() => {
+    if (typeof window !== "undefined") {
+      const storedCart = localStorage.getItem("cart");
+
+      try {
+        return storedCart ? JSON.parse(storedCart) : [];
+      } catch (error) {
+        console.error(error);
+        return [];
+      }
+    }
+  });
+
+  // useEffect(() => {
+    // if (storedCart) {
+    //   try {
+    //     setCart(JSON.parse(storedCart));
+        
+    //   } catch (error) {
+    //     console.error(error);
+    //     setCart([]);
+    //   }
+    // }
+  // }, [])
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+  },[cart]);
 
   const addToCart = (produto: IProduto) => {
-    setCart((prevCart) => [...prevCart, produto]);
+    setCart((prevCart) => {
+      const newCart = [...prevCart, produto];
+      localStorage.setItem("cart", JSON.stringify(newCart));
+      return newCart;
+    });
+  };
+
+  const  removeFromCart = (index: number) => {
+    setCart((prevCart) => {
+      const newCart = prevCart.filter((_, i) => i !== index);
+      localStorage.setItem("cart", JSON.stringify(newCart));
+      return newCart
+    });
   }
+
   return (
     <>
       <Header />
@@ -32,7 +68,7 @@ export default function Home() {
             {/* </Grid2> */}
           </Grid2>
           <Grid2>
-            <Cart cart={cart}/>
+            <Cart cart={cart} removeFromCart={removeFromCart} />
           </Grid2>
         </Grid2>
       </Container> 
