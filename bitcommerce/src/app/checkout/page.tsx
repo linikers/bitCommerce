@@ -3,7 +3,7 @@
 import { Button, Container, TextField, Typography } from "@mui/material";
 import { criarOrdemPagamento } from "@/app/utils/binance";
 import React, { useEffect, useState } from "react";
-import { IProduto } from "./Cart";
+import { IProduto } from "../components/cart/Cart";
 
 export interface IDadosCliente {
     nome: string;

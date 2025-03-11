@@ -1,6 +1,7 @@
 'use client';
 import { Button, Card, CardContent,  Container,  Typography } from "@mui/material";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 // import { useState } from "react";
 
 
@@ -13,7 +14,7 @@ export interface IProduto {
     cart: IProduto[];
   }
 export function Cart({ cart }: CartProps) {
-    // const [dadosCli, setDadosCli] = useState([]);
+
     const router = useRouter();
     const pageCheckout = '/checkout'
     const total = cart.reduce((sum, produto) => sum + (produto.preco || 0), 0);
