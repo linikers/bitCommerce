@@ -23,7 +23,7 @@ export function Cart({ cart }: CartProps) {
          cart, total
         };
         localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
-        router.push = (pageCheckout);
+        router.push(pageCheckout);
     }
     return (
         <Container>
