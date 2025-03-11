@@ -8,6 +8,7 @@ export interface IProduto {
     nome: string,
     preco?: number,
     img?: string,
+    quantidade: number,
   }
   export interface CartProps {
     cart: IProduto[];
@@ -16,8 +17,9 @@ export interface IProduto {
 export function Cart({ cart, removeFromCart }: CartProps) {
 
     const router = useRouter();
-    const pageCheckout = '/checkout'
-    const total = cart.reduce((sum, produto) => sum + (produto.preco || 0), 0);
+    const pageCheckout = '/checkout';
+
+    const total = Array.isArray(cart) ? cart.reduce((sum, produto) => sum + (produto.preco || 0) * produto.quantidade, 0) : 0;
     
     const handleCheckOut = () => {
         const checkoutData = {
@@ -37,7 +39,7 @@ export function Cart({ cart, removeFromCart }: CartProps) {
                 ) : (
                     cart.map((produto, index) => (
                         <div key={produto.id}>
-                            {produto.nome} - R$: {produto.preco?.toFixed(2)}
+                            {produto.nome} - R$: {produto.preco?.toFixed(2)} x { produto.quantidade}
                             <IconButton onClick={() => removeFromCart(index)}>
                                     <RemoveCircleOutlineOutlined />
                             </IconButton>

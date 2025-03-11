@@ -20,7 +20,7 @@ export function ProductList({ addToCart}: ListaProdutosProps) {
                     <Typography variant="h3">R$: {produto.preco}</Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small" onClick={() => addToCart(produto)}>
+                    <Button size="small" onClick={() => addToCart({...produto, quantidade: 1})}>
                         Adicionar ao carrinho
                     </Button>
                 </CardActions>
