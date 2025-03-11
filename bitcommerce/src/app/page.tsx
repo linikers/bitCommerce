@@ -12,7 +12,7 @@ export default function Home() {
   const [cart, setCart] = useState<IProduto[]>([]);
 
   useEffect(() => {
-      if (typeof window !== "undefined") {
+      if (typeof window !== "undefined" ) {
         const storedCart = localStorage.getItem("cart");
   
         try {
@@ -28,7 +28,9 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
+     if (typeof window !== "undefined" && cart.length > 0) {
+       localStorage.setItem("cart", JSON.stringify(cart));
+     }
 
   },[cart]);
 
