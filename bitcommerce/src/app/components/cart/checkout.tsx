@@ -1,8 +1,8 @@
 'use client'
 
-import { Button, Container, Typography } from "@mui/material";
+import { Button, Container, TextField, Typography } from "@mui/material";
 import { criarOrdemPagamento } from "@/app/utils/binance";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IProduto } from "./Cart";
 
 export interface IDadosCliente {
@@ -27,7 +27,12 @@ export default function CheckoutPage() {
         if (checkoutData) {
             try {
                 // const parsedData: IDadosCliente = JSON.parse(checkoutData);
-                setDadosCliente(JSON.parse(checkoutData));
+                const parsedData = JSON.parse(checkoutData);
+                setDadosCliente((prev) => ({
+                    ...prev,
+                    pedido: parsedData.pedido,
+                    total: parsedData.total
+                }));
                 
             } catch (error) {
                 console.error("Erro no checkout",error)
@@ -35,7 +40,13 @@ export default function CheckoutPage() {
         }
     }, [])
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDadosCliente({ ...dadosCliente, [e.target.name]: e.target.value });
+    };
+
     const handlePagamento = async() => {
+        localStorage.setItem("checkoutData", JSON.stringify(dadosCliente));
+
         console.log("processando pagamento...");
         const pagamento = await criarOrdemPagamento(
             dadosCliente.total,
@@ -56,10 +67,15 @@ export default function CheckoutPage() {
         <Container>
             <Typography variant="h3" gutterBottom>Checkout/Pagamento</Typography>
             {/* <checkoutForm /> */}
-            <Typography variant="h5">Nome: {dadosCliente.nome || "não informado"}</Typography>
+            <TextField label="Nome" name="nome" value={dadosCliente.nome} onChange={handleChange} fullWidth margin="normal" />
+            <TextField label="Endereço" name="endereco" value={dadosCliente.endereco} onChange={handleChange} fullWidth margin="normal" />
+            <TextField label="Telefone" name="telefone" value={dadosCliente.telefone} onChange={handleChange} fullWidth margin="normal" />
+            {/* <TextField label="Total" name="total" value={dadosCliente.total} onChange={handleChange} fullWidth margin="normal" /> */}
+            {/* <Typography variant="h5">Nome: {dadosCliente.nome || "não informado"}</Typography>
             <Typography variant="h5">Endereço: {dadosCliente.endereco || "não informado"}</Typography>
             <Typography variant="h5">Telefone: {dadosCliente.telefone || "não informado"}</Typography>
-            <Typography variant="h5">Total: R$ {dadosCliente.total.toFixed(2) || "não informado"}</Typography>
+             */}
+             <Typography variant="h5">Total: R$ {dadosCliente.total.toFixed(2) || "não informado"}</Typography>
 
             {dadosCliente.pedido.length > 0 ? (
                 dadosCliente.pedido.map((produto, index) => (

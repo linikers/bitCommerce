@@ -20,7 +20,8 @@ export function Cart({ cart }: CartProps) {
     
     const handleCheckOut = () => {
         const checkoutData = {
-         cart, total
+         pedido: cart,
+         total: total
         };
         localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
         router.push(pageCheckout);
