@@ -6,7 +6,13 @@ const BINANCE_API_SECRET ='TESTE';
 const url = "https://www.bpay.binanceapi.com";
 
 
-export async function criarOrdemPagamento(amount: number, currency: string, nome: string, endereco: string, telefone: string) {
+export async function criarOrdemPagamento(
+  amount: number,
+  currency: string, 
+  nome: string, 
+  endereco: string, 
+  telefone: string
+) {
   
   const timestamp = Date.now();
   const payload = {
@@ -17,16 +23,19 @@ export async function criarOrdemPagamento(amount: number, currency: string, nome
       tradeType: "WEB",
       productType: "PAY",
       productName: "Pedido Online",
+      productDetail: `Cliente: ${nome}, endereço: ${endereco}, telefone: ${telefone}`,
       returnUrl: "https://sute.app/sucesso",
       cancelUrl: "https://sute.app/cancel"
     };
 
-    const queryString = Object.keys(payload).map(key => `${key}=${payload[key as keyof typeof payload]}`).join("&");
+    const sortedKeys = Object.keys(payload).sort();
+    const queryString = sortedKeys.map(key => `${key}=${payload[key as keyof typeof payload]}`).join("&");
+    // const queryString = Object.keys(payload).map(key => `${key}=${payload[key as keyof typeof payload]}`).join("&");
     const signature = CryptoJS.HmacSHA256(queryString, BINANCE_API_SECRET).toString(CryptoJS.enc.Hex);
 
     try {
       const response = await axios.post(
-        `${url}binancepay/openapi/v3/order`,
+        `${url}/binancepay/openapi/v3/order`,
         payload,
         {
           headers: {

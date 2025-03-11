@@ -1,25 +1,80 @@
 'use client'
+
 import { Container, Grid2, Typography } from "@mui/material";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Cart, IProduto } from "./components/cart";
 import { ProductList } from "./components/cart/ProductList";
-import { useState } from "react";
-// import { produtos } from "../../products";
-// import ProductCard from "./components/ProductCard";
+import React, { useEffect, useState } from "react";
 
 export default function Home() {
-  // const produtos = [
-  //   { id: 1, nome: 'Produto 1', preco: '100', img: '/images/produto1.jpg' },
-  //   { id: 2, nome: 'Produto 2', preco: '200', img: '/images/produto2.jpg' },
-  // ];
+
   const [cart, setCart] = useState<IProduto[]>([]);
 
+  useEffect(() => {
+      if (typeof window !== "undefined" ) {
+        const storedCart = localStorage.getItem("cart");
+  
+        try {
+          setCart(storedCart ? JSON.parse(storedCart) : []);
+        } catch (error) {
+          console.error(error);
+          // return [];
+          setCart([]);
+        }
+      }
+      // return [];
+
+  }, [])
+
+  useEffect(() => {
+     if (typeof window !== "undefined" && cart.length > 0) {
+       localStorage.setItem("cart", JSON.stringify(cart));
+     }
+
+  },[cart]);
+
   const addToCart = (produto: IProduto) => {
-    setCart((prevCart) => [...prevCart, produto]);
+    setCart((prevCart) => {
+      const existingProductIndex = prevCart.findIndex((item) => item.id === produto.id);
+
+      if (existingProductIndex >=0) {
+        const updatedCart = [...prevCart];
+        updatedCart[existingProductIndex] = {
+          ...updatedCart[existingProductIndex],
+          quantidade: updatedCart[existingProductIndex].quantidade + 1,
+        };
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+        
+        return updatedCart;
+
+      } else {
+        const newCart = [...prevCart,{ ...produto, quantidade: 1 }];
+        localStorage.setItem("cart", JSON.stringify(newCart));
+
+        return newCart;
+      }
+    });
+  };
+
+  const  removeFromCart = (index: number) => {
+    setCart((prevCart) => {
+     const updatedCart = [...prevCart];
+     if (updatedCart[index].quantidade > 1) {
+      updatedCart[index] = {
+        ...updatedCart[index],
+        quantidade: updatedCart[index].quantidade -1,
+      }
+     } else {
+      updatedCart.splice(index, 1);
+     }
+     localStorage.setItem("cart", JSON.stringify(updatedCart));
+     return updatedCart;
+    });
   }
+
   return (
-    <>
+    <div>
       <Header />
       <Container>
         <Typography variant="h3" component="h1" align="center" gutterBottom>
@@ -27,16 +82,14 @@ export default function Home() {
         </Typography>
         <Grid2 container spacing={3} sx={{ display: "flex", flexWrap: "wrap"}}>
           <Grid2 sx={{ display: "flex", flexWrap: "wrap"}}>
-            {/* <Grid2> */}
               <ProductList addToCart={addToCart} />
-            {/* </Grid2> */}
           </Grid2>
           <Grid2>
-            <Cart cart={cart}/>
+            <Cart cart={cart} removeFromCart={removeFromCart} />
           </Grid2>
         </Grid2>
       </Container> 
       <Footer />
-    </>
+    </div>
   );
 }
