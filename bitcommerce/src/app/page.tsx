@@ -19,12 +19,9 @@ export default function Home() {
           setCart(storedCart ? JSON.parse(storedCart) : []);
         } catch (error) {
           console.error(error);
-          // return [];
           setCart([]);
         }
       }
-      // return [];
-
   }, [])
 
   useEffect(() => {

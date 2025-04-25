@@ -22,6 +22,7 @@ export default function CheckoutPage() {
         pedido: [],
         total: 0,
     })
+    const [ btcValue, setBtcValue] = useState<string>("0")
 
     useEffect(() => {
         const checkoutData = localStorage.getItem("checkoutData");
@@ -34,12 +35,29 @@ export default function CheckoutPage() {
                     pedido: parsedData.pedido,
                     total: parsedData.total
                 }));
+
+                fetchBtcPrice(parsedData.total);
                 
             } catch (error) {
                 console.error("Erro no checkout",error)
             }
         }
     }, [])
+
+    const fetchBtcPrice = async (totalReal: number ) => {
+        try {
+            const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=brl');
+            
+            const data = await response.json();
+            
+            const btcPreco = data.bitcoin.brl;
+            const btcTotal = totalReal / btcPreco;
+            
+            setBtcValue(btcTotal.toFixed(8));
+        } catch (error) {
+            console.error("Erro ao fazer cotação BTC", error)
+        }
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDadosCliente({ ...dadosCliente, [e.target.name]: e.target.value });
@@ -66,13 +84,14 @@ export default function CheckoutPage() {
 
     return (
         <Container>
-            <Typography variant="h3" gutterBottom>Checkout/Pagamento</Typography>
+            <Typography variant="h5" gutterBottom>Checkout/Pagamento</Typography>
             
             <TextField label="Nome" name="nome" value={dadosCliente.nome} onChange={handleChange} fullWidth margin="normal" />
             <TextField label="Endereço" name="endereco" value={dadosCliente.endereco} onChange={handleChange} fullWidth margin="normal" />
             <TextField label="Telefone" name="telefone" value={dadosCliente.telefone} onChange={handleChange} fullWidth margin="normal" />
    
-            <Typography variant="h5">Total: R$ {dadosCliente.total.toFixed(2) || "não informado"}</Typography>
+            <Typography variant="h5">Total: R$ {dadosCliente.total.toFixed(2)}</Typography>
+            <Typography variant="body1">{btcValue}</Typography>
 
             {dadosCliente.pedido.length > 0 ? (
                 dadosCliente.pedido.map((produto, ) => (
