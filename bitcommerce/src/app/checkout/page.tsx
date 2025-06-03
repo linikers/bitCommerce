@@ -1,9 +1,10 @@
 'use client'
 
-import { Button, Container, TextField, Typography } from "@mui/material";
+import { Button, Container, Dialog, DialogContent, DialogTitle, IconButton, TextField, Typography } from "@mui/material";
 import { criarOrdemPagamento } from "@/app/utils/binance";
 import React, { useEffect, useState } from "react";
 import { IProduto } from "../components/cart/Cart";
+import CloseIcon from '@mui/icons-material/Close';
 
 export interface IDadosCliente {
     // id: number;
@@ -15,6 +16,8 @@ export interface IDadosCliente {
 }
 export default function CheckoutPage() {
 
+    const [openModal, setOpenModal] = useState(false);
+    const [qrCode, setQrcode] = useState("");
     const [dadosCliente, setDadosCliente] = useState<IDadosCliente>({
         nome: "",
         endereco: "",
@@ -64,25 +67,56 @@ export default function CheckoutPage() {
     };
 
     const handlePagamento = async() => {
-        localStorage.setItem("checkoutData", JSON.stringify(dadosCliente));
+        // localStorage.setItem("checkoutData", JSON.stringify(dadosCliente));
 
-        console.log("processando pagamento...");
+        console.log("processando pagamento em cripto...");
         const pagamento = await criarOrdemPagamento(
             dadosCliente.total,
-            "USDT",
-            dadosCliente.nome,
-            dadosCliente.endereco,
-            dadosCliente.telefone
+            "BTC",
+            // "BTC",
+            // dadosCliente.nome,
+            // dadosCliente.endereco,
+            // dadosCliente.telefone
         );
 
-        if (pagamento?.code === "00000") {
-            window.location.href = pagamento.data.qrContent;
+        if (pagamento) {
+            // window.location.href = pagamento.data.qrContent;
+            setQrcode(pagamento.qrCode);
+            setOpenModal(true);
+            // alert(`Escaneie o QRcode: ${pagamento.qrCode}`);
+            localStorage.setItem("cryptoPayment", JSON.stringify(pagamento));
+
         } else {
             console.error("erro ao realizar pagamento", pagamento);
         }
     }
 
     return (
+        <>
+            <Dialog open={openModal} onClose={() => setOpenModal(false)}>
+                <DialogTitle>
+                    Pagamento via cripto
+                    <IconButton onClick={() => setOpenModal(false)} 
+                        sx={{ 
+                            position: 'absolute',
+                            right: 8,
+                            top: 8
+                            }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent sx={{ textAlign: 'center', padding: '18px' }}>
+                    <Typography variant="h6" gutterBottom>
+                        Envie {JSON.parse(localStorage.getItem("cryptoPayment") || "").cryptoAmount} USD
+                    </Typography>
+                        <img src={qrCode} alt="QR code de pagamento" style={{ width: '256px', height: '256px'}} />
+                    <Typography variant="body2" sx={{ marginTop: 2}}>
+                            Ou envie  para: <br/>
+                            <code>{JSON.parse(localStorage.getItem("cryptoPayment") || "").walletAddress}</code>
+                    </Typography>
+                </DialogContent>
+            </Dialog>
         <Container>
             <Typography variant="h5" gutterBottom>Checkout/Pagamento</Typography>
             
@@ -105,5 +139,50 @@ export default function CheckoutPage() {
             
             <Button onClick={handlePagamento} variant="contained" color="primary">Pagar</Button>
         </Container>
+        </>
     )
 }
+
+
+
+
+// // Adicione no início do arquivo
+// import { Dialog, DialogContent, DialogTitle, IconButton } from "@mui/material";
+// import CloseIcon from "@mui/icons-material/Close";
+
+// // Adicione ao componente CheckoutPage
+// const [openModal, setOpenModal] = useState(false);
+// const [qrCodeData, setQrCodeData] = useState("");
+
+// const handlePagamento = async () => {
+//   console.log("Processando pagamento em cripto...");
+//   const pagamento = await criarOrdemPagamento(dadosCliente.total, "USDT");
+
+//   if (pagamento) {
+//     setQrCodeData(pagamento.qrCode);
+//     setOpenModal(true);
+//     localStorage.setItem("cryptoPayment", JSON.stringify(pagamento));
+//   } else {
+//     alert("Erro ao processar pagamento");
+//   }
+// };
+
+// // Adicione no return (dentro do Container)
+// <Dialog open={openModal} onClose={() => setOpenModal(false)}>
+//   <DialogTitle>
+//     Pagamento em Criptomoeda
+//     <IconButton onClick={() => setOpenModal(false)} sx={{ position: 'absolute', right: 8, top: 8 }}>
+//       <CloseIcon />
+//     </IconButton>
+//   </DialogTitle>
+//   <DialogContent sx={{ textAlign: 'center', padding: '20px' }}>
+//     <Typography variant="h6" gutterBottom>
+//       Envie {JSON.parse(localStorage.getItem("cryptoPayment") || {}).cryptoAmount} USDT
+//     </Typography>
+//     <img src={qrCodeData} alt="QR Code para pagamento" style={{ width: '256px', height: '256px' }} />
+//     <Typography variant="body2" sx={{ marginTop: 2 }}>
+//       Ou envie para: <br />
+//       <code>{(JSON.parse(localStorage.getItem("cryptoPayment") || {}).walletAddress}</code>
+//     </Typography>
+//   </DialogContent>
+// </Dialog>

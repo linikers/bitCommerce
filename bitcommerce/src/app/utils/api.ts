@@ -15,7 +15,7 @@ export async function getBTCPrice(): Promise<number> {
     }
 }
 
-export async function cinvertBRLtoBTC(amountInBRL: number): Promise<number> {
+export async function convertBRLtoBTC(amountInBRL: number): Promise<number> {
     const btcPrice = await getBTCPrice();
     return amountInBRL / btcPrice;
 }
