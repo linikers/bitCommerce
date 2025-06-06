@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:api": "ts-node api/index.ts",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -13,7 +14,10 @@
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.1.1",
     "@mui/material": "^6.4.4",
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
     "axios": "^1.8.2",
+    "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "express": "^5.1.0",
     "next": "15.1.7",

@@ -1,11 +1,12 @@
 'use client'
 
-import { Container, Grid2, Typography } from "@mui/material";
+import { Container, Grid, Grid2, Typography } from "@mui/material";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Cart, IProduto } from "./components/cart";
 import { ProductList } from "./components/cart/ProductList";
 import React, { useEffect, useState } from "react";
+// import Grid2 from '@mui/material/Unstable_Grid2';
 
 export default function Home() {
 
@@ -77,13 +78,17 @@ export default function Home() {
         <Typography variant="h3" component="h1" align="center" gutterBottom>
           Produtos
         </Typography>
-        <Grid2 container spacing={3} sx={{ display: "flex", flexWrap: "wrap"}}>
-          <Grid2 sx={{ display: "flex", flexWrap: "wrap"}}>
-              <ProductList addToCart={addToCart} />
-          </Grid2>
-          <Grid2>
+
+        <Grid2 container spacing={3} sx={{ margin: 2 }}>
+          {/* <Grid xs={12} md={8} sx={{ display: "flex"}}> */}
+            <Grid xs={12} md={8}>
+                <ProductList addToCart={addToCart} />
+            </Grid>
+
+          {/* </Grid> */}
+          <Grid xs={8} md={4} >
             <Cart cart={cart} removeFromCart={removeFromCart} />
-          </Grid2>
+          </Grid>
         </Grid2>
       </Container> 
       <Footer />

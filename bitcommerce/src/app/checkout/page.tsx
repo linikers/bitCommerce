@@ -1,11 +1,12 @@
 'use client'
 
 import { Button, Container, Dialog, DialogContent, DialogTitle, IconButton, TextField, Typography } from "@mui/material";
-import { criarOrdemPagamento } from "@/app/utils/binance";
+// import { criarOrdemPagamento } from "@/app/utils/binance";
 import React, { useEffect, useState } from "react";
 // import { IProduto } from "../components/cart/Cart";
 import CloseIcon from '@mui/icons-material/Close';
 import { IProduto } from "../components/cart";
+// import { response } from "express";
 
 export interface IDadosCliente {
     nome: string;
@@ -59,26 +60,37 @@ export default function CheckoutPage() {
 
         console.log("processando pagamento em cripto...");
         try {
-            const pagamento = await criarOrdemPagamento(
-                dadosCliente.total,
-                "BTC",
-                // "BTC",
-                // dadosCliente.nome,
-                // dadosCliente.endereco,
-                // dadosCliente.telefone
-            );
+            const response = await fetch("http://localhost:3001/binance/pagamento", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application.json",
+                },
+                body: JSON.stringify({ amount: dadosCliente.total, currency: "BTC" }),
+            });
+            const data = await response.json();
+            console.log("QR code", data);
+            setDadosPagamento(data);
+            setOpenModal(true);
+            localStorage.setItem("cryptoPayment", JSON.stringify(data));
+            //     dadosCliente.total,
+            //     "BTC",
+            //     // "BTC",
+            //     // dadosCliente.nome,
+            //     // dadosCliente.endereco,
+            //     // dadosCliente.telefone
+            // );
             
-            if (pagamento) {
-                // window.location.href = pagamento.data.qrContent;
-                setDadosPagamento(pagamento);
-                setOpenModal(true);
-                // alert(`Escaneie o QRcode: ${pagamento.qrCode}`);
-                localStorage.setItem("cryptoPayment", JSON.stringify(pagamento));
+            // if (pagamento) {
+            //     // window.location.href = pagamento.data.qrContent;
+            //     setDadosPagamento(pagamento);
+            //     setOpenModal(true);
+            //     // alert(`Escaneie o QRcode: ${pagamento.qrCode}`);
+            //     localStorage.setItem("cryptoPayment", JSON.stringify(pagamento));
     
-            } else {
-                console.error("erro ao realizar pagamento", pagamento);
-                alert("Ocorreu um erro ao processar pagamento, tente novamente.");
-            }
+            // } else {
+            //     console.error("erro ao realizar pagamento", pagamento);
+            //     alert("Ocorreu um erro ao processar pagamento, tente novamente.");
+            // }
         } catch (error) {
             console.error("erro ao realizar pagamento", error);
             alert("Ocorreu um erro ao processar pagamento");

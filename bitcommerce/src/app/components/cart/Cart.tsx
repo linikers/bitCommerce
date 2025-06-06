@@ -48,8 +48,8 @@ export function Cart({ cart, removeFromCart }: CartProps) {
                 )}
                 <Typography variant="h6">Total: R${total.toFixed(2)}</Typography>
             </CardContent>
+            <Button sx={{ marginTop: 2 }} onClick={handleCheckOut}>Finalizar Compra</Button>
         </Card>
-        <Button sx={{ marginTop: 2 }} onClick={handleCheckOut}>Finalizar Compra</Button>
         </Container>
     )
 }
