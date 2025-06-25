@@ -159,6 +159,4 @@ export default function CheckoutPage() {
         </>
     )
 }
-
-
 // const response = await axios.get('http://localhost:3001/binance/address?coin=BTC');
