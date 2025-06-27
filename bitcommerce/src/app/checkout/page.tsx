@@ -23,6 +23,20 @@ export interface IDadosPagamento {
     memo: string;
     qrCode: string;
 }
+
+// interface CryptAPIResponse {
+//     status: string;
+//     address: string;
+//     value_coin: string;
+//     value_forwarded_coin?: string;
+//     value_fiat: string;
+//     coin: string;
+//     pending: string;
+//     qrcode_url: string;
+//     payment_url: string;
+//     timeout: number;
+//   }
+
 export default function CheckoutPage() {
 
     const [openModal, setOpenModal] = useState(false);
@@ -58,39 +72,33 @@ export default function CheckoutPage() {
     const handlePagamento = async() => {
         // localStorage.setItem("checkoutData", JSON.stringify(dadosCliente));
 
-        console.log("processando pagamento em cripto...");
+        console.log("processando pagamento via cryptAPI...");
         try {
-            const response = await fetch("http://localhost:3001/binance/pagamento", {
+            const response = await fetch("/api/cryptapi", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application.json",
                 },
-                body: JSON.stringify({ amount: dadosCliente.total, currency: "BTC" }),
+                body: JSON.stringify({ 
+                    amount: dadosCliente.total, 
+                    currency: "BTC" 
+                }),
             });
+            if (!response.ok) throw new Error('Falha ao criar pagamento');
+
             const data = await response.json();
-            console.log("QR code", data);
-            setDadosPagamento(data);
+            console.log("Response front CryptAPI", data);
+            // setDadosPagamento(data);
+            setDadosPagamento({
+                cryptoAmount: data.cryptoAmount,
+                cryptoCurrency: data.cryptoCurrency,
+                walletAddress: data.walletAdress,
+                qrCode: data.qrCode,
+                memo: '', // sem memo padrao para btc
+            })
             setOpenModal(true);
             localStorage.setItem("cryptoPayment", JSON.stringify(data));
-            //     dadosCliente.total,
-            //     "BTC",
-            //     // "BTC",
-            //     // dadosCliente.nome,
-            //     // dadosCliente.endereco,
-            //     // dadosCliente.telefone
-            // );
-            
-            // if (pagamento) {
-            //     // window.location.href = pagamento.data.qrContent;
-            //     setDadosPagamento(pagamento);
-            //     setOpenModal(true);
-            //     // alert(`Escaneie o QRcode: ${pagamento.qrCode}`);
-            //     localStorage.setItem("cryptoPayment", JSON.stringify(pagamento));
-    
-            // } else {
-            //     console.error("erro ao realizar pagamento", pagamento);
-            //     alert("Ocorreu um erro ao processar pagamento, tente novamente.");
-            // }
+
         } catch (error) {
             console.error("erro ao realizar pagamento", error);
             alert("Ocorreu um erro ao processar pagamento");
