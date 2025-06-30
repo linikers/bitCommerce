@@ -90,11 +90,11 @@ export default function CheckoutPage() {
             console.log("Response front CryptAPI", data);
             // setDadosPagamento(data);
             setDadosPagamento({
-                cryptoAmount: data.cryptoAmount,
-                cryptoCurrency: data.cryptoCurrency,
-                walletAddress: data.walletAddress,
-                qrCode: data.qrCode,
-                memo: '', // sem memo padrao para btc
+                cryptoAmount: data.value_coin,
+                cryptoCurrency: "BTC",
+                walletAddress: data.address,
+                qrCode: data.qrcode_url,
+                memo: data.memo || '', // sem memo padrao para btc
             })
             setOpenModal(true);
             localStorage.setItem("cryptoPayment", JSON.stringify(data));
