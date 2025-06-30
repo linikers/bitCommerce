@@ -77,7 +77,7 @@ export default function CheckoutPage() {
             const response = await fetch("/api/cryptapi", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application.json",
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ 
                     amount: dadosCliente.total, 
@@ -92,7 +92,7 @@ export default function CheckoutPage() {
             setDadosPagamento({
                 cryptoAmount: data.cryptoAmount,
                 cryptoCurrency: data.cryptoCurrency,
-                walletAddress: data.walletAdress,
+                walletAddress: data.walletAddress,
                 qrCode: data.qrCode,
                 memo: '', // sem memo padrao para btc
             })

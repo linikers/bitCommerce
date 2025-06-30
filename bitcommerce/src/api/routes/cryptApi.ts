@@ -12,7 +12,7 @@ export async function POST(req: Request) {
         //conf do crypt
         const cryptApiParams = {
             type: currency.toLowerCase(), //btc / eth
-            adress:'codCarteira', //carteira recebimento (codigo do exodus),
+            adress:'bc1quxnf29ppvxy85pgwzyxxf5aqalwwfql0r9attd', //carteira recebimento (codigo do exodus),
             post: '1', //notificacao post para seu servidor
             callback: `${process.env.NEXT_PUBLIC_BASE_URL}/api/cryptapi/callback`, //
             convert:'1', //converter automaticamente para cripto
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
         };
 
         //chamada api cript
-        const response = await fetch(`https://api.criptapi.io/${currency}/create/`, {
+        const response = await fetch(`https://api.cryptapi.io/${currency}/create/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,9 +38,9 @@ export async function POST(req: Request) {
         return NextResponse.json({
             cryptoAmount: data.value_coin,
             cryptoCurrency: currency,
-            walletAdress: data.adress,
-            qrCode: data.qrCode,
-            paymentUrl: data.paymentUrl,
+            walletAdress: data.address,
+            qrCode: data.qrcode_url,
+            paymentUrl: data.payment_url,
             expiresAt: data.timeout,
         });
 
