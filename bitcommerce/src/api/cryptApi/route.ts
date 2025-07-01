@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
 export async function POST(req: Request) {
     try {
@@ -12,12 +13,12 @@ export async function POST(req: Request) {
         }
         
         //conf do crypt
-        const cryptApiParams = new URLSearchParams();
-        cryptApiParams.append('address', 'bc1quxnf29ppvxy85pgwzyxxf5aqalwwfql0r9attd');
-        cryptApiParams.append('callback', `${process.env.NEXT_PUBLIC_BASE_URL}/api/cryptapi/callback`);
-        cryptApiParams.append('convert', '1');
-        cryptApiParams.append('value', amount.toString());
-        cryptApiParams.append('email', 'seu-email@dominio.com');
+        // const cryptApiParams = new URLSearchParams();
+        // cryptApiParams.append('address', 'bc1quxnf29ppvxy85pgwzyxxf5aqalwwfql0r9attd');
+        // cryptApiParams.append('callback', `${process.env.NEXT_PUBLIC_BASE_URL}/api/cryptapi/callback`);
+        // cryptApiParams.append('convert', '1');
+        // cryptApiParams.append('value', amount.toString());
+        // cryptApiParams.append('email', 'seu-email@dominio.com');
             // type: currency.toLowerCase(), //btc / eth
             // adress:'bc1quxnf29ppvxy85pgwzyxxf5aqalwwfql0r9attd', //carteira recebimento (codigo do exodus),
             // post: '1', //notificacao post para seu servidor
@@ -27,7 +28,21 @@ export async function POST(req: Request) {
             // value: amount, //valor em brl
 
         //chamada api cript
-        const response = await fetch(`https://api.cryptapi.io/btc/create/?${cryptApiParams.toString()}`);
+        // const response = await fetch(`https://api.cryptapi.io/btc/create/?${cryptApiParams.toString()}`);
+        const response = await fetch(`https://api.cryptapi.io/btc/create/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                address: 'bc1quxnf29ppvxy85pgwzyxxf5aqalwwfql0r9attd',
+                callback: `${process.env.NEXT_PUBLIC_BASE_URL}/api/cryptapi/callback`,
+                convert: 1,
+                value: amount,
+                email:  'email@email.com',
+                post: 1,
+            })
+        });
 
         const data = await response.json();
         console.log("resposta api", data);
@@ -41,7 +56,7 @@ export async function POST(req: Request) {
             status: 'success',
             value_coin: data.value_coin,
             address: data.address,
-            qrcode_url: `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=bitcoin:${data.address}`,
+            qrcode_url: data.qrcode_url || `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=bitcoin:${data.address}`,
             memo: data.memo || '',
           });
         // return NextResponse.json({

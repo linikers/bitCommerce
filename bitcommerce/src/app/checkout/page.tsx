@@ -81,14 +81,19 @@ export default function CheckoutPage() {
                 },
                 body: JSON.stringify({ 
                     amount: dadosCliente.total, 
-                    currency: "BTC" 
+                    // currency: "BTC" 
                 }),
             });
-            if (!response.ok) throw new Error('Falha ao criar pagamento');
 
+            
             const data = await response.json();
+            if (!response.ok || data.error) throw new Error('Falha na resposta da api');
             console.log("Response front CryptAPI", data);
             // setDadosPagamento(data);
+            if (!data.address) {
+                throw new Error('Endereço de pagamento não gerado');
+              }
+
             setDadosPagamento({
                 cryptoAmount: data.value_coin,
                 cryptoCurrency: "BTC",
