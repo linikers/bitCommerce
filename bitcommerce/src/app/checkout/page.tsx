@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import { Button, Container, Dialog, DialogContent, DialogTitle, IconButton, TextField, Typography } from "@mui/material";
@@ -22,6 +23,7 @@ export interface IDadosPagamento {
     walletAddress: string;
     memo: string;
     qrCode: string;
+    totalBrl: number;
 }
 
 // interface CryptAPIResponse {
@@ -80,7 +82,7 @@ export default function CheckoutPage() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ 
-                    amount: dadosCliente.total, 
+                    amount: String(dadosCliente.total), 
                     // currency: "BTC" 
                 }),
             });
@@ -95,6 +97,7 @@ export default function CheckoutPage() {
               }
 
             setDadosPagamento({
+                totalBrl: dadosCliente.total,
                 cryptoAmount: data.value_coin,
                 cryptoCurrency: "BTC",
                 walletAddress: data.address,
@@ -129,12 +132,21 @@ export default function CheckoutPage() {
                 </DialogTitle>
                 <DialogContent sx={{ textAlign: 'center', padding: '18px' }}>
                     <Typography variant="h6" gutterBottom>
-                        Envie {dadosPagamento?.cryptoAmount} ${dadosPagamento?.cryptoCurrency} USD
+                        Valor Total R$: {dadosPagamento?.totalBrl.toFixed(2)}
+                    </Typography>
+                    <Typography variant="subtitle" gutterBottom sx={{ mb:2 }}>
+                    {dadosPagamento?.cryptoAmount} BTC
                     </Typography>
                         <img 
                             src={dadosPagamento?.qrCode} 
                             alt="QR code de pagamento" 
-                            style={{ width: '256px', height: '256px'}}
+                            style={{ 
+                                width: '256px',
+                                height: '256px',
+                                margin: '0 auto',
+                                display: 'block ',
+                                border: '1px solid #e0e0e0',
+                                borderRadius: '8px'}}
                         />
                     <Typography variant="body2" sx={{ marginTop: 2}}>
                             Ou envie  para: <br/>
