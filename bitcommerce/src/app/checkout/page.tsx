@@ -1,7 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
-import { Button, Container, Dialog, DialogContent, DialogTitle, IconButton, TextField, Typography } from "@mui/material";
+import {
+    Button,
+    Container,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    IconButton,
+    TextField,
+    Typography
+} from "@mui/material";
 // import { criarOrdemPagamento } from "@/app/utils/binance";
 import React, { useEffect, useState } from "react";
 // import { IProduto } from "../components/cart/Cart";
@@ -17,27 +26,28 @@ export interface IDadosCliente {
     pedido: IProduto[];
 }
 export interface IDadosPagamento {
-    // id: number;
     cryptoAmount: string;
     cryptoCurrency: string;
     walletAddress: string;
     memo: string;
     qrCode: string;
     totalBrl: number;
+    opcoesPagamento?: {
+        bitcoin: {
+            qrCode: string;
+            address: string;
+            amount: string;
+        };
+        pix?: {
+            qrCode: string;
+            chave: string;
+        };
+        cartao?: {
+            linkPagamento: string;
+        };
+    };
 }
 
-// interface CryptAPIResponse {
-//     status: string;
-//     address: string;
-//     value_coin: string;
-//     value_forwarded_coin?: string;
-//     value_fiat: string;
-//     coin: string;
-//     pending: string;
-//     qrcode_url: string;
-//     payment_url: string;
-//     timeout: number;
-//   }
 
 export default function CheckoutPage() {
 
@@ -134,9 +144,9 @@ export default function CheckoutPage() {
                     <Typography variant="h6" gutterBottom>
                         Valor Total R$: {dadosPagamento?.totalBrl.toFixed(2)}
                     </Typography>
-                    <Typography variant="subtitle" gutterBottom sx={{ mb:2 }}>
+                    {/* <Typography variant="subtitle" gutterBottom sx={{ mb:2 }}>
                     {dadosPagamento?.cryptoAmount} BTC
-                    </Typography>
+                    </Typography> */}
                         <img 
                             src={dadosPagamento?.qrCode} 
                             alt="QR code de pagamento" 
