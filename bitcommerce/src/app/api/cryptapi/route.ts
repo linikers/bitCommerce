@@ -4,22 +4,15 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 export async function POST(request: Request) {
-  const mockData = {
-    status: 'success',
-    value_coin: "0.00042",
-    address: "bc1quxnf29ppvxy85pgwzyxxf5aqalwwfql0r9attd",
-    qrcode_url: "https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=bitcoin:bc1quxnf29ppvxy85pgwzyxxf5aqalwwfql0r9attd",
-    memo: ""
-  };
 
   try {
     const { amount } = await request.json();
-    if (!amount || isNaN(amount)) return NextResponse.json(mockData);
+    if (!amount || isNaN(amount)) return console.log("Valor de compra inválido");
 
     // 1. Verifique se o valor atende ao mínimo
     if (amount < 10) { // Valor mínimo em BRL
       console.warn(`Valor ${amount} abaixo do mínimo`);
-      return NextResponse.json(mockData);
+      // return NextResponse.json(mockData);
     }
 
     // 2. Tente com GET primeiro (mais estável)
@@ -54,11 +47,12 @@ export async function POST(request: Request) {
         memo: ''
       });
     }
+    
 
-    return NextResponse.json(mockData);
+    // return NextResponse.json(mockData);
 
   } catch (error) {
     console.error('Erro na integração:', error);
-    return NextResponse.json(mockData);
+    // return NextResponse.json(mockData);
   }
 }

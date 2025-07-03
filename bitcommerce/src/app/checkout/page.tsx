@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
@@ -9,7 +10,9 @@ import {
     DialogContent,
     IconButton,
     TextField,
-    Typography
+    Typography,
+    Tabs,
+    Tab
 } from "@mui/material";
 // import { criarOrdemPagamento } from "@/app/utils/binance";
 import React, { useEffect, useState } from "react";
@@ -32,6 +35,7 @@ export interface IDadosPagamento {
     memo: string;
     qrCode: string;
     totalBrl: number;
+    paymentUrl?: string;
     opcoesPagamento?: {
         bitcoin: {
             qrCode: string;
@@ -62,6 +66,9 @@ export default function CheckoutPage() {
         pedido: [],
     });
 
+    const [paymentMethod, setPaymentMethod] = useState<'pix' | 'btc'>("pix");
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
         const stored  = localStorage.getItem("checkoutData");
         if (stored) {
@@ -81,7 +88,45 @@ export default function CheckoutPage() {
     }
     
 
-    const handlePagamento = async() => {
+    const handlePagamentoPix = async () => {
+
+        setIsLoading(true);
+
+        try {
+            const response = await fetch("/api/nowPayments", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ amount: dadosCliente.total })
+            });
+
+            const data = await response.json();
+            
+            if (!response.ok) throw new Error("Falha ao gerar pix");
+
+            setDadosPagamento({
+                totalBrl: dadosCliente.total,
+                cryptoAmount: data.btc_amount,
+                cryptoCurrency: "BTC",
+                walletAddress: "Now payment",
+                qrCode: data.qr_code,
+                memo: "",
+                paymentUrl: data.payment_url,
+            });
+
+            setOpenModal(true);
+
+            localStorage.setItem("cryptoPayment", JSON.stringify(data));
+
+        } catch (error) {
+            console.error("Erro ao gerar pix:", error);
+            alert("Erro ao processar pix");
+        } finally {
+            setIsLoading(false);
+        }
+    }
+    const handlePagamento = async () => {
         // localStorage.setItem("checkoutData", JSON.stringify(dadosCliente));
 
         console.log("processando pagamento via cryptAPI...");
@@ -144,9 +189,30 @@ export default function CheckoutPage() {
                     <Typography variant="h6" gutterBottom>
                         Valor Total R$: {dadosPagamento?.totalBrl.toFixed(2)}
                     </Typography>
-                    {/* <Typography variant="subtitle" gutterBottom sx={{ mb:2 }}>
-                    {dadosPagamento?.cryptoAmount} BTC
-                    </Typography> */}
+                            <Tabs value={paymentMethod} onChange={(e: any, nValue: any) => setPaymentMethod(nValue)}>
+                                <Tab label="PIX" value="pix"/>
+                                <Tab label="BTC" value="btc"/>
+                            </Tabs>
+                            {paymentMethod === 'pix' && dadosPagamento?.qrCode && (
+                                <>
+                                    <img src={dadosPagamento?.qrCode} alt="QrCode pix" />
+                                    <Typography>Valor PIX: {dadosPagamento?.totalBrl}</Typography>
+                                    <Button
+                                        variant="contained"
+                                        href={dadosPagamento.paymentUrl}
+                                        target="blank"
+                                        sx={{ mt: 2 }}
+                                    >
+                                        Abrir pix no navegador
+                                    </Button>
+                                </>
+                            )}
+                            {paymentMethod === 'btc' && (
+                                <>
+                                    <img src={dadosPagamento?.qrCode} alt="QrCode pix" />
+                                    <Typography>Valor BTC: {dadosPagamento?.cryptoAmount}</Typography>
+                                </>
+                            )}
                         <img 
                             src={dadosPagamento?.qrCode} 
                             alt="QR code de pagamento" 
@@ -189,7 +255,14 @@ export default function CheckoutPage() {
                 <Typography variant="body2">Nenhum produto no pedido</Typography>
             )}
             
-            <Button onClick={handlePagamento} variant="contained" color="primary">Pagar</Button>
+            <Button 
+                onClick={() => paymentMethod === 'pix' ? handlePagamentoPix() : handlePagamento}
+                disable={isLoading}
+                variant="contained"
+                color="primary"
+            >
+                Pagar
+            </Button>
         </Container>
         </>
     )
