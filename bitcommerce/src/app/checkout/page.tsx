@@ -93,7 +93,7 @@ export default function CheckoutPage() {
         setIsLoading(true);
 
         try {
-            const response = await fetch("/api/nowPayments", {
+            const response = await fetch("/api/bipa", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -109,8 +109,8 @@ export default function CheckoutPage() {
                 totalBrl: dadosCliente.total,
                 cryptoAmount: data.btc_amount,
                 cryptoCurrency: "BTC",
-                walletAddress: "Now payment",
-                qrCode: data.qr_code,
+                walletAddress: "Wallet of Satoshi",
+                qrCode: data.qrCode,
                 memo: "",
                 paymentUrl: data.payment_url,
             });
@@ -128,7 +128,7 @@ export default function CheckoutPage() {
     }
     const handlePagamento = async () => {
         // localStorage.setItem("checkoutData", JSON.stringify(dadosCliente));
-
+        //crypt funciona
         console.log("processando pagamento via cryptAPI...");
         try {
             const response = await fetch("/api/cryptapi", {
@@ -249,3 +249,4 @@ export default function CheckoutPage() {
     )
 }
 // const response = await axios.get('http://localhost:3001/binance/address?coin=BTC');
+//rotina bipa + wos(wallet of satoshi) em
