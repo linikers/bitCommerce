@@ -31,46 +31,21 @@ export async function POST(request: Request) {
 }
 
 //**
-// components/PixPayment.tsx
-// "use client";
-// import { useState } from "react";
+// import { gerarPayloadPix } from 'pix-utils'; // Biblioteca fictícia
 
-// export default function PixPayment() {
-//   const [amount, setAmount] = useState(50); // R$ 50,00
-//   const [paymentData, setPaymentData] = useState<{
-//     payment_url: string;
-//     qr_code: string;
-//     btc_amount: number;
-//   } | null>(null);
+// 1. Gere o payload PIX
+// const payload = gerarPayloadPix({
+//   chave: "seu-pix@email.com",
+//   valor: amount,
+//   cidade: "Sao Paulo",
+//   nome: "Sua Loja",
+//   txId: "123456"
+// });
 
-//   const handleGeneratePix = async () => {
-//     const res = await fetch("/api/nowpayments", {
-//       method: "POST",
-//       body: JSON.stringify({ amount }),
-//     });
-//     const data = await res.json();
-//     setPaymentData(data);
-//   };
+// // 2. Crie o QR Code a partir do payload
+// const qrCodePix = await QRCode.toDataURL(payload);
 
-//   return (
-//     <div>
-//       <input
-//         type="number"
-//         value={amount}
-//         onChange={(e) => setAmount(Number(e.target.value))}
-//       />
-//       <button onClick={handleGeneratePix}>Gerar PIX</button>
-
-//       {paymentData && (
-//         <div>
-//           <p>Pague R$ {amount} via PIX:</p>
-//           <img src={paymentData.qr_code} alt="QR Code PIX" />
-//           <p>Você receberá: {paymentData.btc_amount} BTC</p>
-//           <a href={paymentData.payment_url} target="_blank">
-//             Ou clique aqui para pagar
-//           </a>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
+// return NextResponse.json({
+//   qr_code: qrCodePix, // QR Code PIX válido
+//   payload: payload    // Opcional: mostra o código copia-e-cola
+// });

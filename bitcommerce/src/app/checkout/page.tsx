@@ -209,30 +209,11 @@ export default function CheckoutPage() {
                             )}
                             {paymentMethod === 'btc' && (
                                 <>
-                                    <img src={dadosPagamento?.qrCode} alt="QrCode pix" />
+                                    <img src={dadosPagamento?.qrCode} alt="QrCode btc" />
                                     <Typography>Valor BTC: {dadosPagamento?.cryptoAmount}</Typography>
                                 </>
                             )}
-                        <img 
-                            src={dadosPagamento?.qrCode} 
-                            alt="QR code de pagamento" 
-                            style={{ 
-                                width: '256px',
-                                height: '256px',
-                                margin: '0 auto',
-                                display: 'block ',
-                                border: '1px solid #e0e0e0',
-                                borderRadius: '8px'}}
-                        />
-                    <Typography variant="body2" sx={{ marginTop: 2}}>
-                            Ou envie  para: <br/>
-                            <code>{dadosPagamento?.walletAddress}</code>
-                            {dadosPagamento?.memo && (
-                                <>
-                                    <br />Memo/Tag: <code>{dadosPagamento.memo}</code>
-                                </>
-                            )}
-                    </Typography>
+
                 </DialogContent>
             </Dialog>
         <Container>
