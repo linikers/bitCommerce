@@ -1,10 +1,16 @@
 'use client'
 
-import { Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } from "@mui/material";
+import {
+    CardContent,
+    CardActions,
+    Typography,
+    CardMedia,
+    Button,
+    Card,
+    Grid,
+} from "@mui/material";
 import { IProduto } from "./Cart"
 import { produtos } from "../../../../products";
-// import { Height } from "@mui/icons-material";
-
 
 interface ListaProdutosProps {
     addToCart: (produto: IProduto) => void;
