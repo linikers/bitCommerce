@@ -1,11 +1,26 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
-import { Button, Container, Dialog, DialogContent, DialogTitle, IconButton, TextField, Typography } from "@mui/material";
-import { criarOrdemPagamento } from "@/app/utils/binance";
+import {
+    Button,
+    Container,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    IconButton,
+    TextField,
+    Typography,
+    Tabs,
+    Tab,
+    Divider
+} from "@mui/material";
+// import { criarOrdemPagamento } from "@/app/utils/binance";
 import React, { useEffect, useState } from "react";
 // import { IProduto } from "../components/cart/Cart";
 import CloseIcon from '@mui/icons-material/Close';
 import { IProduto } from "../components/cart";
+// import { response } from "express";
 
 export interface IDadosCliente {
     nome: string;
@@ -15,13 +30,31 @@ export interface IDadosCliente {
     pedido: IProduto[];
 }
 export interface IDadosPagamento {
-    // id: number;
-    cryptoAmount: string;
+    // cryptoAmount: string;
     cryptoCurrency: string;
     walletAddress: string;
     memo: string;
     qrCode: string;
+    totalBrl: number;
+    paymentUrl?: string;
+    chave?: string;
+    opcoesPagamento?: {
+        bitcoin: {
+            qrCode: string;
+            address: string;
+            amount: string;
+        };
+        pix?: {
+            qrCode: string;
+            chave: string;
+        };
+        cartao?: {
+            linkPagamento: string;
+        };
+    };
 }
+
+
 export default function CheckoutPage() {
 
     const [openModal, setOpenModal] = useState(false);
@@ -34,6 +67,9 @@ export default function CheckoutPage() {
         total: 0,
         pedido: [],
     });
+
+    const [paymentMethod, setPaymentMethod] = useState<'pix' | 'btc'>("pix");
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const stored  = localStorage.getItem("checkoutData");
@@ -54,31 +90,83 @@ export default function CheckoutPage() {
     }
     
 
-    const handlePagamento = async() => {
-        // localStorage.setItem("checkoutData", JSON.stringify(dadosCliente));
+    const handlePagamentoPix = async () => {
 
-        console.log("processando pagamento em cripto...");
+        setIsLoading(true);
+
         try {
-            const pagamento = await criarOrdemPagamento(
-                dadosCliente.total,
-                "BTC",
-                // "BTC",
-                // dadosCliente.nome,
-                // dadosCliente.endereco,
-                // dadosCliente.telefone
-            );
+            console.log("Enviando para /api/bipa:", { amount: dadosCliente.total });
+            console.log(dadosCliente);
+            console.log(dadosPagamento);
+            const response = await fetch("/api/bipa", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ amount: dadosCliente.total })
+            });
+
+            const data = await response.json();
+            console.log(data);
+            if (!response.ok) throw new Error("Falha ao gerar pix");
+
+            setDadosPagamento({
+                totalBrl: dadosCliente.total,
+                // cryptoAmount: data.btc_amount,
+                cryptoCurrency: "BTC",
+                walletAddress: "Wallet of Satoshi",
+                qrCode: data.qrCode,
+                memo: "",
+                paymentUrl: data.payment_url,
+            });
+
+            setOpenModal(true);
+
+            localStorage.setItem("cryptoPayment", JSON.stringify(data));
+            console.log(dadosPagamento);
+        } catch (error) {
+            console.error("Erro ao gerar pix:", error);
+            alert("Erro ao processar pix");
+        } finally {
+            setIsLoading(false);
+        }
+    }
+    const handlePagamento = async () => {
+        // localStorage.setItem("checkoutData", JSON.stringify(dadosCliente));
+        //crypt funciona
+        console.log("processando pagamento via cryptAPI...");
+        try {
+            const response = await fetch("/api/cryptapi", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ 
+                    amount: String(dadosCliente.total), 
+                    // currency: "BTC" 
+                }),
+            });
+
             
-            if (pagamento) {
-                // window.location.href = pagamento.data.qrContent;
-                setDadosPagamento(pagamento);
-                setOpenModal(true);
-                // alert(`Escaneie o QRcode: ${pagamento.qrCode}`);
-                localStorage.setItem("cryptoPayment", JSON.stringify(pagamento));
-    
-            } else {
-                console.error("erro ao realizar pagamento", pagamento);
-                alert("Ocorreu um erro ao processar pagamento, tente novamente.");
-            }
+            const data = await response.json();
+            if (!response.ok || data.error) throw new Error('Falha na resposta da api');
+            console.log("Response front CryptAPI", data);
+            // setDadosPagamento(data);
+            if (!data.address) {
+                throw new Error('Endereço de pagamento não gerado');
+              }
+
+            setDadosPagamento({
+                totalBrl: dadosCliente.total,
+                // cryptoAmount: data.value_coin,
+                cryptoCurrency: "BTC",
+                walletAddress: data.address,
+                qrCode: data.qrcode_url,
+                memo: data.memo || '', // sem memo padrao para btc
+            })
+            setOpenModal(true);
+            localStorage.setItem("cryptoPayment", JSON.stringify(data));
+
         } catch (error) {
             console.error("erro ao realizar pagamento", error);
             alert("Ocorreu um erro ao processar pagamento");
@@ -86,7 +174,7 @@ export default function CheckoutPage() {
         }
 
     }
-
+    console.log("dados pagamento", dadosPagamento);
     return (
         <>
             <Dialog open={openModal} onClose={() => setOpenModal(false)}>
@@ -104,22 +192,36 @@ export default function CheckoutPage() {
                 </DialogTitle>
                 <DialogContent sx={{ textAlign: 'center', padding: '18px' }}>
                     <Typography variant="h6" gutterBottom>
-                        Envie {dadosPagamento?.cryptoAmount} ${dadosPagamento?.cryptoCurrency} USD
+                        Valor Total R$: {dadosPagamento?.totalBrl.toFixed(2)}
                     </Typography>
-                        <img 
-                            src={dadosPagamento?.qrCode} 
-                            alt="QR code de pagamento" 
-                            style={{ width: '256px', height: '256px'}}
-                        />
-                    <Typography variant="body2" sx={{ marginTop: 2}}>
-                            Ou envie  para: <br/>
-                            <code>{dadosPagamento?.walletAddress}</code>
-                            {dadosPagamento?.memo && (
+                            <Tabs value={paymentMethod} onChange={(e: any, nValue: any) => setPaymentMethod(nValue)}>
+                                <Tab label="PIX" value="pix"/>
+                                <Tab label="BTC" value="btc"/>
+                            </Tabs>
+                            {paymentMethod === 'pix' && dadosPagamento?.qrCode && (
                                 <>
-                                    <br />Memo/Tag: <code>{dadosPagamento.memo}</code>
+                                    <img src={dadosPagamento?.qrCode} alt="QrCode pix" />
+                                    <Typography>Valor PIX: {dadosPagamento?.totalBrl}</Typography>
+                                    <Divider />
+                                    <Typography>{dadosPagamento.chave}</Typography>
+                                    {/* <Button
+                                        onClick={() => navigator.clipboard.writeText(dadosPagamento.paymentUrl!)}
+                                        variant="contained"
+                                        href={dadosPagamento.paymentUrl}
+                                        target="blank"
+                                        sx={{ mt: 2 }}
+                                    >
+                                        Abrir pix no navegador
+                                    </Button> */}
                                 </>
                             )}
-                    </Typography>
+                            {paymentMethod === 'btc' && (
+                                <>
+                                    <img src={dadosPagamento?.qrCode} alt="QrCode btc" />
+                                    {/* <Typography>Valor BTC: {dadosPagamento?.cryptoAmount}</Typography> */}
+                                </>
+                            )}
+
                 </DialogContent>
             </Dialog>
         <Container>
@@ -142,11 +244,17 @@ export default function CheckoutPage() {
                 <Typography variant="body2">Nenhum produto no pedido</Typography>
             )}
             
-            <Button onClick={handlePagamento} variant="contained" color="primary">Pagar</Button>
+            <Button 
+                onClick={() => paymentMethod === 'pix' ? handlePagamentoPix() : handlePagamento}
+                disabled={isLoading}
+                variant="contained"
+                color="primary"
+            >
+                Pagar
+            </Button>
         </Container>
         </>
     )
 }
-
-
 // const response = await axios.get('http://localhost:3001/binance/address?coin=BTC');
+//rotina bipa + wos(wallet of satoshi) em

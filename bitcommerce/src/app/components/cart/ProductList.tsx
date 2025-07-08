@@ -1,9 +1,16 @@
 'use client'
 
-import { Button, Card, CardActions, CardContent, Typography } from "@mui/material";
+import {
+    CardContent,
+    CardActions,
+    Typography,
+    CardMedia,
+    Button,
+    Card,
+    Grid,
+} from "@mui/material";
 import { IProduto } from "./Cart"
 import { produtos } from "../../../../products";
-
 
 interface ListaProdutosProps {
     addToCart: (produto: IProduto) => void;
@@ -12,20 +19,49 @@ interface ListaProdutosProps {
 
 export function ProductList({ addToCart}: ListaProdutosProps) {
     return (
-        <>
-        {produtos.map((produto, ) => (
-            <Card key={produto.id} sx={{ mb: 2, margin: 1 }}>
-                <CardContent>
-                    <Typography variant="h3">{produto.nome}</Typography>
-                    <Typography variant="h3">R$: {produto.preco}</Typography>
-                </CardContent>
-                <CardActions>
-                    <Button size="small" onClick={() => addToCart({...produto, quantidade: 1})}>
-                        Adicionar ao carrinho
-                    </Button>
-                </CardActions>
-            </Card>
-        ))}
-        </>
+        <Grid container spacing={3}>
+            {produtos.map((produto) => (
+                <Grid key={produto.id} xs={12} sm={6} md={4}>
+                    <Card 
+                        sx={{
+                            justifyContent: "space-between",
+                            flexDirection: "column",
+                            overFlow: 'hidden',
+                            borderRadius: 4,
+                            display: "flex",
+                            height: "100%",
+                            minHeight: 280,
+                            boxShadow: 4,
+                            margin: 2,
+                            // p: 4,
+                        }}>
+                        <CardMedia 
+                            image={produto.img}
+                            alt={produto.nome}
+                            component="img"
+                            height="160"
+                            sx={{
+                                objectFit: "cover",
+                                borderRadius: 2,
+                                // width: "100%",
+                            }}
+                        />
+                        <CardContent sx={{ flexGrow: 1 }}>
+                            <Typography variant="h6" gutterBottom>{produto.nome}</Typography>
+                            <Typography variant="body1">R$: {produto.preco}</Typography>
+                        </CardContent>
+                        <CardActions sx={{ justifyContent: "center", pb: 2 }}>
+                            <Button 
+                                fullWidth
+                                variant="contained"
+                                onClick={() => addToCart({ ...produto, quantidade: 1 })}
+                            >
+                                Adicionar ao carrinho
+                            </Button>
+                        </CardActions>
+                    </Card>
+                </Grid>    
+            ))}
+        </Grid>
     )
 }

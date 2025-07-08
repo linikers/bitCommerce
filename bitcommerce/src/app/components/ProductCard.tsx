@@ -21,7 +21,7 @@ export default function ProductCard({ produto}: {produto: Produto}) {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="small" color="primary">
+                    <Button>
                         Comprar
                     </Button>
                 </CardActions>
