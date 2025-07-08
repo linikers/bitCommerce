@@ -205,15 +205,6 @@ export default function CheckoutPage() {
                                     <Divider />
                                     <Typography>Chave Pix</Typography>
                                     <Typography>{dadosPagamento.chave}</Typography>
-                                    {/* <Button
-                                        onClick={() => navigator.clipboard.writeText(dadosPagamento.paymentUrl!)}
-                                        variant="contained"
-                                        href={dadosPagamento.paymentUrl}
-                                        target="blank"
-                                        sx={{ mt: 2 }}
-                                    >
-                                        Abrir pix no navegador
-                                    </Button> */}
                                 </>
                             )}
                             {paymentMethod === 'btc' && (
