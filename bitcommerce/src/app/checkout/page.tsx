@@ -12,7 +12,8 @@ import {
     TextField,
     Typography,
     Tabs,
-    Tab
+    Tab,
+    Divider
 } from "@mui/material";
 // import { criarOrdemPagamento } from "@/app/utils/binance";
 import React, { useEffect, useState } from "react";
@@ -29,13 +30,14 @@ export interface IDadosCliente {
     pedido: IProduto[];
 }
 export interface IDadosPagamento {
-    cryptoAmount: string;
+    // cryptoAmount: string;
     cryptoCurrency: string;
     walletAddress: string;
     memo: string;
     qrCode: string;
     totalBrl: number;
     paymentUrl?: string;
+    chave?: string;
     opcoesPagamento?: {
         bitcoin: {
             qrCode: string;
@@ -93,6 +95,9 @@ export default function CheckoutPage() {
         setIsLoading(true);
 
         try {
+            console.log("Enviando para /api/bipa:", { amount: dadosCliente.total });
+            console.log(dadosCliente);
+            console.log(dadosPagamento);
             const response = await fetch("/api/bipa", {
                 method: "POST",
                 headers: {
@@ -102,12 +107,12 @@ export default function CheckoutPage() {
             });
 
             const data = await response.json();
-            
+            console.log(data);
             if (!response.ok) throw new Error("Falha ao gerar pix");
 
             setDadosPagamento({
                 totalBrl: dadosCliente.total,
-                cryptoAmount: data.btc_amount,
+                // cryptoAmount: data.btc_amount,
                 cryptoCurrency: "BTC",
                 walletAddress: "Wallet of Satoshi",
                 qrCode: data.qrCode,
@@ -118,7 +123,7 @@ export default function CheckoutPage() {
             setOpenModal(true);
 
             localStorage.setItem("cryptoPayment", JSON.stringify(data));
-
+            console.log(dadosPagamento);
         } catch (error) {
             console.error("Erro ao gerar pix:", error);
             alert("Erro ao processar pix");
@@ -153,7 +158,7 @@ export default function CheckoutPage() {
 
             setDadosPagamento({
                 totalBrl: dadosCliente.total,
-                cryptoAmount: data.value_coin,
+                // cryptoAmount: data.value_coin,
                 cryptoCurrency: "BTC",
                 walletAddress: data.address,
                 qrCode: data.qrcode_url,
@@ -169,7 +174,7 @@ export default function CheckoutPage() {
         }
 
     }
-
+    console.log("dados pagamento", dadosPagamento);
     return (
         <>
             <Dialog open={openModal} onClose={() => setOpenModal(false)}>
@@ -197,20 +202,23 @@ export default function CheckoutPage() {
                                 <>
                                     <img src={dadosPagamento?.qrCode} alt="QrCode pix" />
                                     <Typography>Valor PIX: {dadosPagamento?.totalBrl}</Typography>
-                                    <Button
+                                    <Divider />
+                                    <Typography>{dadosPagamento.chave}</Typography>
+                                    {/* <Button
+                                        onClick={() => navigator.clipboard.writeText(dadosPagamento.paymentUrl!)}
                                         variant="contained"
                                         href={dadosPagamento.paymentUrl}
                                         target="blank"
                                         sx={{ mt: 2 }}
                                     >
                                         Abrir pix no navegador
-                                    </Button>
+                                    </Button> */}
                                 </>
                             )}
                             {paymentMethod === 'btc' && (
                                 <>
                                     <img src={dadosPagamento?.qrCode} alt="QrCode btc" />
-                                    <Typography>Valor BTC: {dadosPagamento?.cryptoAmount}</Typography>
+                                    {/* <Typography>Valor BTC: {dadosPagamento?.cryptoAmount}</Typography> */}
                                 </>
                             )}
 
@@ -238,7 +246,7 @@ export default function CheckoutPage() {
             
             <Button 
                 onClick={() => paymentMethod === 'pix' ? handlePagamentoPix() : handlePagamento}
-                disable={isLoading}
+                disabled={isLoading}
                 variant="contained"
                 color="primary"
             >
