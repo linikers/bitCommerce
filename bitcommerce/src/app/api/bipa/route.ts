@@ -1,7 +1,7 @@
 // import { bech32 } from "bech32";
-import { NextRequest, NextResponse } from "next/server";
-import { QrCodePix } from "qrcode-pix";
-import QRCode from "qrcode";
+import { NextRequest, NextResponse } from 'next/server';
+import { QrCodePix } from 'qrcode-pix';
+import QRCode from 'qrcode';
 
 // function decodeLnurl(lnurl: string) {
 //     // const limpaUrl = lnurl.replace("lnurl", '');

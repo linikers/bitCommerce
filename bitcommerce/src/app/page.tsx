@@ -1,11 +1,11 @@
 'use client'
 
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Grid, Typography } from '@mui/material';
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Cart, IProduto } from "./components/cart";
 import { ProductList } from "./components/cart/ProductList";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 // import Grid2 from '@mui/material/Unstable_Grid2';
 
 export default function Home() {
