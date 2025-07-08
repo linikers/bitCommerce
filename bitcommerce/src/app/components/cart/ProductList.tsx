@@ -9,7 +9,8 @@ import {
     Card,
     Grid,
 } from "@mui/material";
-import { IProduto } from "./Cart"
+// import { IProduto } from "./Cart"
+import { IProduto } from "@/app/components/cart";
 import { produtos } from "../../../../products";
 
 interface ListaProdutosProps {

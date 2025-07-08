@@ -19,7 +19,8 @@ import {
 import React, { useEffect, useState } from "react";
 // import { IProduto } from "../components/cart/Cart";
 import CloseIcon from '@mui/icons-material/Close';
-import { IProduto } from "../components/cart";
+// import { IProduto } from "../components/cart";
+import { IProduto } from "@/app/components/cart";
 // import { response } from "express";
 
 export interface IDadosCliente {
