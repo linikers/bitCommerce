@@ -1,5 +1,6 @@
 import { Box, Button, Container, Typography } from "@mui/material";
 import { notFound } from "next/navigation";
+import Image from 'next/image'
 ///detalhes do produto especifico
 export default function ProdutoDetalhado({ params }: {params: {id: string}} ) {
     const produtos = [
@@ -13,16 +14,21 @@ export default function ProdutoDetalhado({ params }: {params: {id: string}} ) {
     return (
         <Container>
             <Box my={4}>
-                <Typography variant="h3" component="h1" gutterBottom>{produto.nome}</Typography>
+                <Typography variant="h3" gutterBottom>{produto.nome}</Typography>
             </Box>
-            <img src={produto.img} alt={produto.nome} style={{ maxWidth: '100%', height:'auto'}} />
+            {/* <img src={produto.img} alt={produto.nome} style={{ maxWidth: '100%', height:'auto'}} /> */}
+            <Image 
+                src={produto.img}
+                alt={produto.nome}
+                style={{ maxWidth: '100%', height: 'auto'}}
+            />
             <Typography variant="body1" paragraph>
                 {produto.descricao}
             </Typography>
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h6" gutterBottom>
                 R$: {produto.preco}
             </Typography>
-            <Button variant="contained" color="primary">
+            <Button>
                 Adicionar ao carrinho
             </Button>
         </Container>
