@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import {
@@ -15,12 +14,11 @@ import {
     Tab,
     Divider
 } from "@mui/material";
-// import { criarOrdemPagamento } from "@/app/utils/binance";
 import React, { useEffect, useState } from "react";
-// import { IProduto } from "../components/cart/Cart";
 import CloseIcon from '@mui/icons-material/Close';
 import { IProduto } from "../components/cart";
-// import { response } from "express";
+import Header from "../components/Header";
+import Image from 'next/image';
 
 export interface IDadosCliente {
     nome: string;
@@ -30,7 +28,6 @@ export interface IDadosCliente {
     pedido: IProduto[];
 }
 export interface IDadosPagamento {
-    // cryptoAmount: string;
     cryptoCurrency: string;
     walletAddress: string;
     memo: string;
@@ -58,7 +55,6 @@ export interface IDadosPagamento {
 export default function CheckoutPage() {
 
     const [openModal, setOpenModal] = useState(false);
-    // const [qrCode, setQrcode] = useState("");
     const [dadosPagamento, setDadosPagamento] = useState<IDadosPagamento | null>(null);
     const [dadosCliente, setDadosCliente] = useState<IDadosCliente>({
         nome: '',
@@ -112,7 +108,6 @@ export default function CheckoutPage() {
 
             setDadosPagamento({
                 totalBrl: dadosCliente.total,
-                // cryptoAmount: data.btc_amount,
                 cryptoCurrency: "BTC",
                 walletAddress: "Wallet of Satoshi",
                 qrCode: data.qrCode,
@@ -174,7 +169,7 @@ export default function CheckoutPage() {
         }
 
     }
-    console.log("dados pagamento", dadosPagamento);
+    // console.log("dados pagamento", dadosPagamento);
     return (
         <>
             <Dialog open={openModal} onClose={() => setOpenModal(false)}>
@@ -200,7 +195,11 @@ export default function CheckoutPage() {
                             </Tabs>
                             {paymentMethod === 'pix' && dadosPagamento?.qrCode && (
                                 <>
-                                    <img src={dadosPagamento?.qrCode} alt="QrCode pix" />
+                                    {/* <img src={dadosPagamento?.qrCode} alt="QrCode pix" /> */}
+                                    <Image 
+                                        src={dadosPagamento.qrCode}
+                                        alt="QrCode pix"
+                                    />
                                     <Typography>Valor PIX: {dadosPagamento?.totalBrl}</Typography>
                                     <Divider />
                                     <Typography>{dadosPagamento.chave}</Typography>
@@ -217,13 +216,18 @@ export default function CheckoutPage() {
                             )}
                             {paymentMethod === 'btc' && (
                                 <>
-                                    <img src={dadosPagamento?.qrCode} alt="QrCode btc" />
-                                    {/* <Typography>Valor BTC: {dadosPagamento?.cryptoAmount}</Typography> */}
+                                    {/* <img src={dadosPagamento?.qrCode} alt="QrCode btc" /> */}
+                                    <Image 
+                                        // src={dadosPagamento.qrCode}
+                                        src="teste"
+                                        alt="Qrcode btc"
+                                    />
                                 </>
                             )}
 
                 </DialogContent>
             </Dialog>
+        <Header />
         <Container>
             <Typography variant="h5" gutterBottom>Checkout/Pagamento</Typography>
             
