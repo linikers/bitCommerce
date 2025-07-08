@@ -75,12 +75,18 @@ export default function Home() {
     <Box>
       <Header />
       <Container sx={{ mt: 6, mb: 8 }}>
-        <Typography variant="h4" component="h1" align="center" gutterBottom>
+        <Typography
+          variant="h4"
+          component="h1"
+          align="center"
+          gutterBottom
+          sx={{ margin: 2 }}
+        >
           Produtos
         </Typography>
 
         <Grid container spacing={6}>
-            <Grid xs={12} md={8}>
+            <Grid item xs={12} md={8}>
                 <ProductList addToCart={addToCart}/>
             </Grid>
 

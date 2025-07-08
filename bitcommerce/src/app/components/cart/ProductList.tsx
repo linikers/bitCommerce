@@ -26,15 +26,14 @@ export function ProductList({ addToCart}: ListaProdutosProps) {
                         sx={{
                             justifyContent: "space-between",
                             flexDirection: "column",
-                            // maxWidth: "200px",
                             overFlow: 'hidden',
                             borderRadius: 4,
                             display: "flex",
                             height: "100%",
-                            boxShadow: 4,
-                            p: 4,
-                            marginTop: 2,
                             minHeight: 280,
+                            boxShadow: 4,
+                            margin: 2,
+                            // p: 4,
                         }}>
                         <CardMedia 
                             image={produto.img}
