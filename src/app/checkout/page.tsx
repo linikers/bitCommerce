@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
@@ -18,7 +19,7 @@ import React, { useEffect, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import { IProduto } from "../components/cart";
 import Header from "../components/Header";
-import Image from 'next/image';
+// import Image from 'next/image'; não usar no qrCode
 
 export interface IDadosCliente {
     nome: string;
@@ -195,13 +196,14 @@ export default function CheckoutPage() {
                             </Tabs>
                             {paymentMethod === 'pix' && dadosPagamento?.qrCode && (
                                 <>
-                                    {/* <img src={dadosPagamento?.qrCode} alt="QrCode pix" /> */}
-                                    <Image 
+                                    <img src={dadosPagamento?.qrCode} alt="QrCode pix" />
+                                    {/* <Image 
                                         src={dadosPagamento.qrCode}
                                         alt="QrCode pix"
-                                    />
+                                    /> */}
                                     <Typography>Valor PIX: {dadosPagamento?.totalBrl}</Typography>
                                     <Divider />
+                                    <Typography>Chave Pix</Typography>
                                     <Typography>{dadosPagamento.chave}</Typography>
                                     {/* <Button
                                         onClick={() => navigator.clipboard.writeText(dadosPagamento.paymentUrl!)}
@@ -216,12 +218,12 @@ export default function CheckoutPage() {
                             )}
                             {paymentMethod === 'btc' && (
                                 <>
-                                    {/* <img src={dadosPagamento?.qrCode} alt="QrCode btc" /> */}
-                                    <Image 
+                                    <img src={dadosPagamento?.walletAddress} alt="QrCode btc" />
+                                    {/* <Image 
                                         // src={dadosPagamento.qrCode}
                                         src="teste"
                                         alt="Qrcode btc"
-                                    />
+                                    /> */}
                                 </>
                             )}
 

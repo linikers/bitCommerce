@@ -12,18 +12,21 @@ import QRCode from 'qrcode';
 // }
 
 export async function POST(req:NextRequest) {
-    // const lnurl = "lnurl1dp68gurn8ghj7ampd3kx2ar0veekzar0wd5xjtnrdakj7tnhv4kxctttdehhwm30d3h82unvwqhhqmmsw4kxzunvv9mnjdsgcmnwc";
     // const lnurlTratada = decodeLnurl(lnurl);
     // console.log(lnurlTratada);
-
+    
     try {
         const { amount } = await req.json();
         // https://bipa.app/pagar?identifier=<IDENTIFIER>&amount=<VALOR_EM_SATS
         if (!amount || isNaN(amount)) {
             return NextResponse.json({error: "valor invalido"}, { status: 400 });
         }
+        
         const chavePixBipa = '849f738c-1e93-4d78-ab52-f3c6890b997e';
+        
+        const lnurl = "lnurl1dp68gurn8ghj7ampd3kx2ar0veekzar0wd5xjtnrdakj7tnhv4kxctttdehhwm30d3h82unvwqhhqmmsw4kxzunvv9mnjdsgcmnwc";
 
+        
         const qrcodePix = QrCodePix({
             version: '01',
             key: chavePixBipa,
@@ -55,6 +58,7 @@ export async function POST(req:NextRequest) {
         return NextResponse.json({
             payment_url: payload,
             totalBrl: amount,
+            walletAddress: lnurl,
             // qrCode: `https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=${encodeURIComponent(paymentURL)}`
             qrCode: qrCodebase64,
             chave: chavePixBipa,
