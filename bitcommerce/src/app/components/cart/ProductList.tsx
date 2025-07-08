@@ -13,26 +13,44 @@ interface ListaProdutosProps {
 
 export function ProductList({ addToCart}: ListaProdutosProps) {
     return (
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
             {produtos.map((produto) => (
                 <Grid key={produto.id} xs={12} sm={6} md={4}>
-                    <Card sx={{ margin: "8px", maxWidth: "250px", height: "100%", flexDirection: "Column" }}>
+                    <Card 
+                        sx={{
+                            justifyContent: "space-between",
+                            flexDirection: "column",
+                            // maxWidth: "200px",
+                            overFlow: 'hidden',
+                            borderRadius: 4,
+                            display: "flex",
+                            height: "100%",
+                            boxShadow: 4,
+                            p: 4,
+                            marginTop: 2,
+                            minHeight: 280,
+                        }}>
                         <CardMedia 
+                            image={produto.img}
+                            alt={produto.nome}
                             component="img"
                             height="160"
-                            image={`/images/${produto.img}`}
-                            alt={produto.img}
                             sx={{
                                 objectFit: "cover",
-                                width: "100%",
+                                borderRadius: 2,
+                                // width: "100%",
                             }}
                         />
-                        <CardContent>
-                            <Typography variant="h6">{produto.nome}</Typography>
+                        <CardContent sx={{ flexGrow: 1 }}>
+                            <Typography variant="h6" gutterBottom>{produto.nome}</Typography>
                             <Typography variant="body1">R$: {produto.preco}</Typography>
                         </CardContent>
-                        <CardActions>
-                            <Button onClick={() => addToCart({ ...produto, quantidade: 1 })}>
+                        <CardActions sx={{ justifyContent: "center", pb: 2 }}>
+                            <Button 
+                                fullWidth
+                                variant="contained"
+                                onClick={() => addToCart({ ...produto, quantidade: 1 })}
+                            >
                                 Adicionar ao carrinho
                             </Button>
                         </CardActions>

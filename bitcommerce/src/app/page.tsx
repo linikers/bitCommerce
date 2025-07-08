@@ -1,6 +1,6 @@
 'use client'
 
-import { Grid, Grid2, Typography } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Cart, IProduto } from "./components/cart";
@@ -72,24 +72,24 @@ export default function Home() {
   }
 
   return (
-    <div>
+    <Box>
       <Header />
-      <Grid2 container spacing={3} sx={{ margin: 2 }}>
-        <Typography variant="h3" component="h1" align="center" gutterBottom>
+      <Container sx={{ mt: 6, mb: 8 }}>
+        <Typography variant="h4" component="h1" align="center" gutterBottom>
           Produtos
         </Typography>
 
-        <Grid2 container>
+        <Grid container spacing={6}>
             <Grid xs={12} md={8}>
-                <ProductList addToCart={addToCart} />
+                <ProductList addToCart={addToCart}/>
             </Grid>
 
-          <Grid xs={12} md={4} sx={{ marginTop: {xs:4, md: 0}}}>
+          <Grid xs={12} md={4}>
             <Cart cart={cart} removeFromCart={removeFromCart} />
           </Grid>
-        </Grid2>
-      </Grid2> 
+        </Grid>
+      </Container> 
       <Footer />
-    </div>
+    </Box>
   );
 }
