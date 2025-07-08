@@ -25,8 +25,25 @@ export async function POST(req:NextRequest) {
         const chavePixBipa = '849f738c-1e93-4d78-ab52-f3c6890b997e';
         
         const lnurl = "lnurl1dp68gurn8ghj7ampd3kx2ar0veekzar0wd5xjtnrdakj7tnhv4kxctttdehhwm30d3h82unvwqhhqmmsw4kxzunvv9mnjdsgcmnwc";
+        //montar o qr do LNURL
+        // const sats = Math.floor(amount *3333);
+        // const responseBipa = await fetch("https://api.bipa.app/v1/generate-invoice", {
+        //     method: "POST",
+        //     headers: { "Content-Type": "application/json" },
+        //     body: JSON.stringify({
+        //         lnurl: lnurl,
+        //         amount: sats,
+        //         currency:"BRL"
+        //     })
+        // });
 
+        // const dataWallet = await responseBipa.json();
+        // return NextResponse.json({
+        //     paymentUrl: dataWallet.payment_link,
+        //     qrCode:`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(data.payment_link)}`,
+        // });
         
+
         const qrcodePix = QrCodePix({
             version: '01',
             key: chavePixBipa,
