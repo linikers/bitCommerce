@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react"
 // import { login } from '@/lib/auth';
 
