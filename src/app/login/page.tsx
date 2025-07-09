@@ -1,11 +1,11 @@
-'use client'
+// 'use client'
 
-import { FormLogin } from "./form"
+import { FormLogin } from "./components/form"
 
 export default function Login() {
     return (
-        <main>
+        <form>
             <FormLogin />
-        </main>
+        </form>
     )
 }

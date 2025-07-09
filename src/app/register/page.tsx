@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
