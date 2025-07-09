@@ -13,7 +13,8 @@ import {
     Typography,
     Tabs,
     Tab,
-    Divider
+    Divider,
+    Box
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
@@ -92,9 +93,9 @@ export default function CheckoutPage() {
         setIsLoading(true);
 
         try {
-            console.log("Enviando para /api/bipa:", { amount: dadosCliente.total });
-            console.log(dadosCliente);
-            console.log(dadosPagamento);
+            // console.log("Enviando para /api/bipa:", { amount: dadosCliente.total });
+            // console.log(dadosCliente);
+            // console.log(dadosPagamento);
             const response = await fetch("/api/bipa", {
                 method: "POST",
                 headers: {
@@ -104,7 +105,7 @@ export default function CheckoutPage() {
             });
 
             const data = await response.json();
-            console.log(data);
+            // console.log(data);
             if (!response.ok) throw new Error("Falha ao gerar pix");
 
             setDadosPagamento({
@@ -114,12 +115,13 @@ export default function CheckoutPage() {
                 qrCode: data.qrCode,
                 memo: "",
                 paymentUrl: data.payment_url,
+                chave: data.chave,
             });
 
             setOpenModal(true);
 
             localStorage.setItem("cryptoPayment", JSON.stringify(data));
-            console.log(dadosPagamento);
+            // console.log(dadosPagamento);
         } catch (error) {
             console.error("Erro ao gerar pix:", error);
             alert("Erro ao processar pix");
@@ -146,7 +148,7 @@ export default function CheckoutPage() {
             
             const data = await response.json();
             if (!response.ok || data.error) throw new Error('Falha na resposta da api');
-            console.log("Response front CryptAPI", data);
+            // console.log("Response front CryptAPI", data);
             // setDadosPagamento(data);
             if (!data.address) {
                 throw new Error('Endereço de pagamento não gerado');
@@ -195,27 +197,18 @@ export default function CheckoutPage() {
                                 <Tab label="BTC" value="btc"/>
                             </Tabs>
                             {paymentMethod === 'pix' && dadosPagamento?.qrCode && (
-                                <>
+                                <Box>
                                     <img src={dadosPagamento?.qrCode} alt="QrCode pix" />
-                                    {/* <Image 
-                                        src={dadosPagamento.qrCode}
-                                        alt="QrCode pix"
-                                    /> */}
-                                    <Typography>Valor PIX: {dadosPagamento?.totalBrl}</Typography>
+                                    <Typography variant="body1">Valor PIX: {dadosPagamento?.totalBrl}</Typography>
                                     <Divider />
-                                    <Typography>Chave Pix</Typography>
-                                    <Typography>{dadosPagamento.chave}</Typography>
-                                </>
+                                    <Typography variant="body1"  color="primary">{dadosPagamento.chave}</Typography>
+                                    <Typography variant="body1">Chave Pix</Typography>
+                                </Box>
                             )}
                             {paymentMethod === 'btc' && (
-                                <>
+                                <Box>
                                     <img src={dadosPagamento?.walletAddress} alt="QrCode btc" />
-                                    {/* <Image 
-                                        // src={dadosPagamento.qrCode}
-                                        src="teste"
-                                        alt="Qrcode btc"
-                                    /> */}
-                                </>
+                                </Box>
                             )}
 
                 </DialogContent>

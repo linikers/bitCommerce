@@ -20,7 +20,10 @@ export default function ProdutoDetalhado({ params }: {params: {id: string}} ) {
             <Image 
                 src={produto.img}
                 alt={produto.nome}
-                style={{ maxWidth: '100%', height: 'auto'}}
+                style={{ 
+                    maxWidth: '100%',
+                    height: 'auto'
+                }}
             />
             <Typography variant="body1" paragraph>
                 {produto.descricao}
