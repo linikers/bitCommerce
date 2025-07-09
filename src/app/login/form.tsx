@@ -1,7 +1,7 @@
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react"
-import { login } from '@/lib/auth';
+// import { login } from '@/lib/auth';
 
 export function FormLogin() {
 
@@ -12,8 +12,8 @@ export function FormLogin() {
     const [error, setError] = useState('');
 
     const handleLogin = async () => {
-        const success = await login(email, senha);
-
+        // const success = await login(email, senha);
+        const success = 0;
         if (success) router.push('/dashboard');
         else setError("Credenciais inválidas")
     }
