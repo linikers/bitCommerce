@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = (email: string, password: string) => {
     const foundUser = users.find(u => u.email === email && u.password === password)
     if (foundUser) {
-      const { password: _, ...userWithoutPassword } = foundUser
+      const { password: _, ...userWithoutPassword } = foundUser // eslint-disable-line @typescript-eslint/no-unused-vars
       setUser(userWithoutPassword)
       localStorage.setItem('user', JSON.stringify(userWithoutPassword))
       return true

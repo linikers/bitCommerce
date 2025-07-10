@@ -19,42 +19,76 @@ interface ListaProdutosProps {
 
 export function ProductList({ addToCart}: ListaProdutosProps) {
     return (
-        <Grid container spacing={3}>
+        <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
             {produtos.map((produto) => (
-                <Grid key={produto.id} xs={12} sm={6} md={4}>
+                <Grid key={produto.id} item xs={12} sm={6} lg={4}>
                     <Card 
                         sx={{
-                            justifyContent: "space-between",
-                            flexDirection: "column",
-                            overFlow: 'hidden',
-                            borderRadius: 4,
                             display: "flex",
+                            flexDirection: "column",
                             height: "100%",
-                            minHeight: 280,
-                            boxShadow: 4,
-                            margin: 2,
-                            // p: 4,
+                            borderRadius: 3,
+                            boxShadow: 3,
+                            overflow: 'hidden',
+                            transition: 'all 0.3s ease-in-out',
+                            '&:hover': {
+                                transform: 'translateY(-4px)',
+                                boxShadow: 6,
+                            }
                         }}>
                         <CardMedia 
+                            component="img"
                             image={produto.img}
                             alt={produto.nome}
-                            component="img"
-                            height="160"
                             sx={{
+                                height: { xs: 180, sm: 200 },
                                 objectFit: "cover",
-                                borderRadius: 2,
-                                // width: "100%",
                             }}
                         />
-                        <CardContent sx={{ flexGrow: 1 }}>
-                            <Typography variant="h6" gutterBottom>{produto.nome}</Typography>
-                            <Typography variant="body1">R$: {produto.preco}</Typography>
+                        <CardContent sx={{ 
+                            flexGrow: 1, 
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 1,
+                            p: { xs: 2, sm: 3 }
+                        }}>
+                            <Typography 
+                                variant="h6" 
+                                component="h3"
+                                sx={{ 
+                                    fontWeight: 600,
+                                    lineHeight: 1.3,
+                                    mb: 1
+                                }}
+                            >
+                                {produto.nome}
+                            </Typography>
+                            <Typography 
+                                variant="h5" 
+                                color="primary"
+                                sx={{ 
+                                    fontWeight: 700,
+                                    mt: 'auto'
+                                }}
+                            >
+                                R$ {produto.preco}
+                            </Typography>
                         </CardContent>
-                        <CardActions sx={{ justifyContent: "center", pb: 2 }}>
+                        <CardActions sx={{ 
+                            p: { xs: 2, sm: 3 },
+                            pt: 0
+                        }}>
                             <Button 
                                 fullWidth
                                 variant="contained"
+                                size="large"
                                 onClick={() => addToCart({ ...produto, quantidade: 1 })}
+                                sx={{
+                                    borderRadius: 2,
+                                    textTransform: 'none',
+                                    fontWeight: 600,
+                                    py: 1.5
+                                }}
                             >
                                 Adicionar ao carrinho
                             </Button>

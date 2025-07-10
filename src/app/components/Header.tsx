@@ -1,6 +1,6 @@
 import { AppBar, Box, Toolbar, Typography } from "@mui/material";
 import Image from 'next/image'
-// import profilePeri from '../public/images/peri3.png';
+import Link from 'next/link'
 
 export default function Header() {
 
@@ -21,11 +21,9 @@ export default function Header() {
                         alignItems: 'center',
                     }}
                 >
+                    <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                         <Image 
-                            // src={profilePeri}
-                            // src="../public/images/peri3.png"
                             src="/images/peri3.png"
-                            // src="../"
                             alt="logoPeri"
                             width={90}
                             height={90}
@@ -37,6 +35,7 @@ export default function Header() {
                             color: "#333",
                         }}>
                         Peri</Typography>
+                    </Link>
                 </Box>
             </Toolbar>
         </AppBar>

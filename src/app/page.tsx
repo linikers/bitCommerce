@@ -6,7 +6,6 @@ import Footer from "./components/Footer";
 import { Cart, IProduto } from "./components/cart";
 import { ProductList } from "./components/cart/ProductList";
 import React, { useEffect, useState } from 'react';
-// import Grid2 from '@mui/material/Unstable_Grid2';
 
 export default function Home() {
 
@@ -72,29 +71,49 @@ export default function Home() {
   }
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
-      <Container sx={{ mt: 6, mb: 8 }}>
+      
+      <Container 
+        maxWidth="xl" 
+        sx={{ 
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          py: { xs: 2, md: 4 },
+          px: { xs: 2, md: 3 }
+        }}
+      >
         <Typography
           variant="h4"
           component="h1"
           align="center"
           gutterBottom
-          sx={{ margin: 2 }}
+          sx={{ 
+            mb: { xs: 3, md: 4 },
+            fontSize: { xs: '1.8rem', md: '2.125rem' }
+          }}
         >
           Produtos
         </Typography>
 
-        <Grid container spacing={6}>
-            <Grid item xs={12} md={8}>
-                <ProductList addToCart={addToCart}/>
-            </Grid>
+        <Grid container spacing={{ xs: 2, md: 4 }} sx={{ flex: 1 }}>
+          <Grid item xs={12} lg={8}>
+            <ProductList addToCart={addToCart}/>
+          </Grid>
 
-          <Grid xs={12} md={4}>
-            <Cart cart={cart} removeFromCart={removeFromCart} />
+          <Grid item xs={12} lg={4}>
+            <Box sx={{ 
+              position: { lg: 'sticky' },
+              top: { lg: '2rem' },
+              height: { lg: 'fit-content' }
+            }}>
+              <Cart cart={cart} removeFromCart={removeFromCart} />
+            </Box>
           </Grid>
         </Grid>
       </Container> 
+      
       <Footer />
     </Box>
   );
