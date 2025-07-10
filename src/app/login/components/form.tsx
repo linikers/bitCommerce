@@ -2,20 +2,20 @@
 
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useState } from "react"
-// import { login } from '@/lib/auth';
+import { useState } from "react";
+import { useAuth } from '@/contexts/AuthContext';
 
 export function FormLogin() {
 
     const router = useRouter();
+    const { login } = useAuth();
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [error, setError] = useState('');
 
     const handleLogin = async () => {
-        // const success = await login(email, senha);
-        const success = 0;
+        const success = login(email, senha);
         if (success) router.push('/dashboard');
         else setError("Credenciais inválidas")
     }
